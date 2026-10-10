@@ -1,0 +1,2831 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<title>Royale Hermanos Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* ============================================================
+   ROYALE HERMANOS — BURGUNDY & BLACK
+   ============================================================ */
+:root {
+  --bg: #0A0A0A;
+  --bg-2: #100C0E;
+  --panel: #16121A;
+  --panel-2: #1C161E;
+  --line: #2A1F26;
+  --line-soft: #221A20;
+
+  --burgundy: #800020;
+  --burgundy-bright: #A32638;
+  --burgundy-deep: #5C0017;
+  --crimson: #C8102E;
+  --rose: #E8B4B8;
+  --cream: #F5E6E8;
+
+  --text: #F5E6E8;
+  --muted: #A88F94;
+  --dim: #6B5659;
+
+  --green: #16A34A;
+  --green-bright: #22C55E;
+  --red: #DC2626;
+  --amber: #D97706;
+
+  --radius: 14px;
+  --radius-sm: 10px;
+
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+/* ============================================================
+   LOADING PAGE
+   ============================================================ */
+#loading {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #0A0A0A;
+  padding: 24px;
+  transition: opacity 0.6s ease, visibility 0.6s;
+  overflow: hidden;
+}
+#loading.hide { opacity: 0; visibility: hidden; }
+
+#loading::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(128,0,32,0.35), transparent 65%);
+  pointer-events: none;
+  animation: glowPulse 4s ease-in-out infinite;
+}
+#loading::after {
+  content: '';
+  position: absolute;
+  bottom: -200px; right: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(200,16,46,0.15), transparent 65%);
+  pointer-events: none;
+  animation: glowPulse 5s ease-in-out infinite reverse;
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+}
+
+.grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(232,180,184,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,180,184,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+.load-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+}
+
+.load-logo {
+  width: 76px; height: 76px;
+  margin: 0 auto 26px;
+  border-radius: 16px;
+  background: linear-gradient(155deg, #1A0E12 0%, #0A0A0A 100%);
+  border: 1px solid rgba(163, 38, 56, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #E8B4B8;
+  letter-spacing: -0.5px;
+  box-shadow: 0 20px 60px rgba(128, 0, 32, 0.3);
+  animation: logoIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  position: relative;
+}
+.load-logo::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, rgba(200,16,46,0.6), transparent 40%, transparent 60%, rgba(200,16,46,0.3));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+}
+@keyframes logoIn {
+  from { opacity: 0; transform: scale(0.9) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.load-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: #F5E6E8;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  animation: fadeUp 0.6s ease-out 0.2s both;
+}
+.load-sub {
+  font-size: 10px;
+  color: #6B5659;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 40px;
+  animation: fadeUp 0.6s ease-out 0.3s both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.load-progress {
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto 14px;
+  height: 2px;
+  background: rgba(232, 180, 184, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  animation: fadeUp 0.6s ease-out 0.4s both;
+}
+.load-progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #5C0017, #800020, #C8102E);
+  border-radius: 2px;
+  transition: width 0.4s ease-out;
+  box-shadow: 0 0 12px rgba(200, 16, 46, 0.6);
+}
+
+.load-status {
+  font-size: 10px;
+  color: #6B5659;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  animation: fadeUp 0.6s ease-out 0.5s both;
+}
+.load-footer {
+  position: absolute;
+  bottom: 32px;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 9px;
+  color: #4A383B;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 600;
+  animation: fadeUp 0.6s ease-out 0.7s both;
+}
+.load-footer strong {
+  color: #A32638;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.app-shell.show { opacity: 1; }
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.sidebar {
+  background: linear-gradient(180deg, #16121A, #100C0E);
+  border-right: 1px solid var(--line);
+  padding: 24px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.brand-mark {
+  width: 44px; height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #2A1F26, #0F0A0D);
+  border: 1px solid rgba(163, 38, 56, 0.5);
+  color: #E8B4B8;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.5px;
+  box-shadow: inset 0 0 18px rgba(163, 38, 56, 0.15);
+  flex-shrink: 0;
+}
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.brand-copy strong {
+  font-size: 11px;
+  letter-spacing: 1.3px;
+  color: #E8B4B8;
+  font-weight: 800;
+}
+.brand-copy span {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--dim);
+  font-weight: 600;
+}
+
+nav {
+  display: grid;
+  gap: 4px;
+}
+.nav-item {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 12px 14px;
+  border-radius: 10px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+.nav-ico {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+.nav-item:hover {
+  background: rgba(163, 38, 56, 0.08);
+  color: var(--cream);
+}
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(163, 38, 56, 0.2), rgba(163, 38, 56, 0.04));
+  color: #E8B4B8;
+  font-weight: 600;
+  box-shadow: inset 3px 0 #A32638;
+}
+
+.lang-switch {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 1px solid var(--line-soft);
+}
+.lang-switch button {
+  flex: 1;
+  padding: 6px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--dim);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+}
+.lang-switch button.active {
+  background: linear-gradient(135deg, #A32638, #800020);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(163, 38, 56, 0.4);
+}
+
+.sidebar-bottom {
+  color: var(--green-bright);
+  font-size: 10px;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-weight: 700;
+}
+.sidebar-bottom small {
+  width: 100%;
+  color: var(--dim);
+  letter-spacing: 0.3px;
+  font-size: 9px;
+  padding-left: 15px;
+  font-weight: 500;
+}
+.live-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: var(--green-bright);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+  animation: livePulse 2s ease-in-out infinite;
+}
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+.main-content {
+  padding: 26px clamp(18px, 3vw, 42px) 18px;
+  min-width: 0;
+  width: 100%;
+  max-width: 1700px;
+  margin: 0 auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 22px;
+}
+.eyebrow {
+  font-size: 10px;
+  color: var(--burgundy-bright);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.topbar h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: var(--cream);
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.clock-box {
+  text-align: right;
+  display: grid;
+  gap: 4px;
+}
+.clock-box span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+.clock-box strong {
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: var(--rose);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+.icon-btn {
+  height: 40px;
+  width: 40px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--panel);
+  color: var(--rose);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.icon-btn:hover {
+  background: var(--burgundy);
+  color: #fff;
+  border-color: var(--burgundy);
+}
+
+/* ============================================================
+   WELCOME
+   ============================================================ */
+.welcome-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 24px 0 18px;
+}
+.welcome-row h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+  color: var(--cream);
+}
+.welcome-row p {
+  color: var(--muted);
+  font-size: 12px;
+}
+.date-pill, .mini-tag {
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 7px 12px;
+  color: var(--rose);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  font-weight: 700;
+  background: rgba(163, 38, 56, 0.06);
+}
+
+/* ============================================================
+   STATS CARDS
+   ============================================================ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, #1A1319, #130F14);
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--burgundy-bright);
+}
+.stat-card:nth-child(2)::before { background: var(--green); }
+.stat-card:nth-child(3)::before { background: var(--dim); }
+.stat-card:nth-child(4)::before { background: var(--burgundy); }
+
+.stat-card span {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.stat-card strong {
+  display: block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(22px, 2.3vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  font-variant-numeric: tabular-nums;
+  color: var(--cream);
+}
+.stat-card small {
+  display: block;
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--dim);
+  font-weight: 500;
+}
+.green-text { color: var(--green-bright) !important; }
+.burgundy-text { color: var(--rose) !important; }
+
+/* ============================================================
+   PANEL
+   ============================================================ */
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.panel {
+  background: linear-gradient(145deg, #181218, #130F14);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  min-width: 0;
+}
+.content-grid .panel { margin-bottom: 0; }
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.panel-heading h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--cream);
+  letter-spacing: -0.2px;
+}
+.panel-heading p {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.trophy {
+  font-size: 20px;
+  color: var(--burgundy-bright);
+}
+
+/* ============================================================
+   CHART
+   ============================================================ */
+.chart-wrap {
+  height: 245px;
+  position: relative;
+}
+.chart-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--line-soft);
+}
+.chart-tab {
+  flex: 1;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 7px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+.chart-tab.active {
+  background: var(--panel);
+  color: var(--rose);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* ============================================================
+   RANKING LIST
+   ============================================================ */
+.ranking-list {
+  display: grid;
+  gap: 10px;
+}
+.ranking-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+.rank-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: rgba(163, 38, 56, 0.15);
+  color: var(--rose);
+  font-size: 11px;
+  font-weight: 800;
+}
+.rank-name {
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--cream);
+}
+.rank-role {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.rank-hours {
+  font-size: 12px;
+  color: var(--rose);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+/* Full ranking */
+.full-ranking {
+  display: grid;
+  gap: 8px;
+}
+.full-rank-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--line-soft);
+  transition: all 0.15s;
+}
+.full-rank-item:hover {
+  background: rgba(163, 38, 56, 0.06);
+  border-color: rgba(163, 38, 56, 0.3);
+}
+.full-rank-item.top-1 {
+  background: linear-gradient(90deg, rgba(163, 38, 56, 0.15), transparent);
+  border-color: rgba(163, 38, 56, 0.4);
+}
+.full-rank-item.top-2 {
+  background: linear-gradient(90deg, rgba(128, 0, 32, 0.1), transparent);
+}
+.full-rank-item.top-3 {
+  background: linear-gradient(90deg, rgba(92, 0, 23, 0.15), transparent);
+}
+.full-rank-num {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--dim);
+  min-width: 28px;
+  text-align: center;
+}
+.full-rank-item.top-1 .full-rank-num,
+.full-rank-item.top-2 .full-rank-num,
+.full-rank-item.top-3 .full-rank-num {
+  color: var(--rose);
+}
+.full-rank-info {
+  flex: 1;
+  min-width: 0;
+}
+.full-rank-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.full-rank-role {
+  font-size: 11px;
+  color: var(--muted);
+}
+.full-rank-hours {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--rose);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  white-space: nowrap;
+  text-align: left;
+}
+th {
+  color: var(--dim);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  padding: 12px 13px;
+  border-bottom: 1px solid var(--line);
+}
+td {
+  padding: 13px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 12px;
+  color: var(--cream);
+}
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: rgba(163, 38, 56, 0.03); }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 100px;
+  padding: 5px 10px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+}
+.status.on {
+  background: rgba(22, 163, 74, 0.15);
+  color: var(--green-bright);
+}
+.status.off {
+  background: rgba(163, 38, 56, 0.12);
+  color: var(--muted);
+}
+.status:before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.text-button {
+  border: 0;
+  background: transparent;
+  color: var(--rose);
+  font-size: 11px;
+  font-weight: 700;
+}
+.primary-btn, .secondary-btn {
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s;
+}
+.primary-btn {
+  background: linear-gradient(135deg, #A32638, #800020);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(163, 38, 56, 0.3);
+}
+.primary-btn:hover {
+  background: linear-gradient(135deg, #C8102E, #A32638);
+  box-shadow: 0 6px 20px rgba(163, 38, 56, 0.4);
+}
+.primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.secondary-btn {
+  background: var(--panel-2);
+  border-color: var(--line);
+  color: var(--rose);
+}
+.secondary-btn:hover {
+  background: rgba(163, 38, 56, 0.1);
+  border-color: rgba(163, 38, 56, 0.4);
+}
+.block-btn {
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* ============================================================
+   FORM
+   ============================================================ */
+.attendance-grid {
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+}
+label {
+  display: block;
+  color: var(--rose);
+  font-size: 11px;
+  margin: 14px 0 7px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+input, select {
+  width: 100%;
+  background: #0D0A0E;
+  border: 1px solid var(--line);
+  color: var(--cream);
+  padding: 12px;
+  border-radius: 9px;
+  outline: none;
+  min-width: 0;
+  font-size: 13px;
+  transition: border-color 0.15s;
+  color-scheme: dark;
+}
+input:focus, select:focus {
+  border-color: var(--burgundy-bright);
+  box-shadow: 0 0 0 3px rgba(163, 38, 56, 0.15);
+}
+input::placeholder { color: var(--dim); }
+
+.clock-actions {
+  display: flex;
+  gap: 9px;
+  margin-top: 18px;
+}
+.clock-actions button { flex: 1; }
+
+.form-hint {
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--dim);
+  margin-top: 12px;
+}
+
+/* Date row untuk form libur */
+.date-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.date-row > div { min-width: 0; }
+.date-row label {
+  margin-top: 14px;
+  margin-bottom: 7px;
+}
+.date-row input {
+  width: 100%;
+}
+
+/* ============================================================
+   DROP ZONE (CUKAI)
+   ============================================================ */
+.drop-zone {
+  border: 2px dashed rgba(163, 38, 56, 0.3);
+  border-radius: 12px;
+  padding: 26px 16px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 4px;
+}
+.drop-zone.over {
+  border-color: var(--burgundy-bright);
+  background: rgba(163, 38, 56, 0.08);
+  transform: scale(1.01);
+}
+.drop-zone.has-img {
+  border-style: solid;
+  border-color: var(--green);
+  padding: 10px;
+  background: rgba(22, 163, 74, 0.05);
+}
+.drop-ico {
+  font-size: 32px;
+  margin-bottom: 8px;
+  display: block;
+}
+.drop-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+.drop-hint {
+  font-size: 10px;
+  color: var(--dim);
+  line-height: 1.6;
+}
+.tax-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  display: none;
+}
+.drop-zone.has-img .drop-ico,
+.drop-zone.has-img .drop-text,
+.drop-zone.has-img .drop-hint {
+  display: none;
+}
+.drop-zone.has-img .tax-preview {
+  display: block;
+}
+
+/* ============================================================
+   ACTIVE SHIFTS
+   ============================================================ */
+.active-shifts {
+  display: grid;
+  gap: 10px;
+}
+.active-shift {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+}
+.active-shift strong {
+  font-size: 12px;
+  display: block;
+  margin-bottom: 4px;
+  color: var(--cream);
+}
+.active-shift small {
+  font-size: 10px;
+  color: var(--muted);
+}
+.active-shift .elapsed {
+  color: var(--green-bright);
+  font-size: 12px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+/* ============================================================
+   LEAVE ITEM
+   ============================================================ */
+.leave-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+}
+.leave-item .info { flex: 1; min-width: 0; }
+.leave-item strong {
+  font-size: 12px;
+  display: block;
+  margin-bottom: 4px;
+  color: var(--cream);
+}
+.leave-item small {
+  font-size: 10px;
+  color: var(--muted);
+  display: block;
+  line-height: 1.5;
+}
+.leave-item .dates {
+  font-size: 10px;
+  color: var(--rose);
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.badge-reason {
+  display: inline-block;
+  padding: 3px 8px;
+  background: rgba(163, 38, 56, 0.12);
+  color: var(--rose);
+  border-radius: 100px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   LIVE PILL
+   ============================================================ */
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--green-bright);
+  font-size: 9px;
+  letter-spacing: 1px;
+  font-weight: 800;
+}
+
+/* ============================================================
+   NOTICE
+   ============================================================ */
+.notice {
+  border: 1px solid rgba(163, 38, 56, 0.4);
+  background: rgba(163, 38, 56, 0.1);
+  color: var(--rose);
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin: 15px 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+.notice.error {
+  border-color: rgba(220, 38, 38, 0.4);
+  background: rgba(220, 38, 38, 0.1);
+  color: #FCA5A5;
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 16px 0;
+  text-align: center;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  padding: 17px 2px 5px;
+  color: var(--dim);
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 600;
+}
+footer span:last-child { color: var(--burgundy-bright); }
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+.hidden { display: none !important; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .app-shell { grid-template-columns: 78px minmax(0, 1fr); }
+  .sidebar { padding: 20px 10px; align-items: center; }
+  .brand-copy { display: none; }
+  .brand { justify-content: center; }
+  .nav-item { justify-content: center; padding: 12px 6px; }
+  .nav-label { display: none; }
+  .nav-ico { font-size: 19px; }
+  .lang-switch { flex-direction: column; padding: 4px; }
+  .sidebar-bottom { font-size: 0; justify-content: center; }
+  .sidebar-bottom small { display: none; }
+  .content-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .app-shell { display: block; }
+  .sidebar {
+    position: fixed;
+    z-index: 50;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    border-right: 0;
+    border-top: 1px solid var(--line);
+    display: block;
+    background: rgba(16, 12, 14, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .brand, .sidebar-bottom, .lang-switch { display: none; }
+  nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 2px;
+    border-radius: 8px;
+    align-items: center;
+  }
+  .nav-label { display: block; font-size: 9px; }
+  .nav-ico { font-size: 17px; }
+  .nav-item.active { box-shadow: inset 0 2px var(--burgundy-bright); }
+
+  .main-content { padding: 18px 13px 95px; }
+  .topbar { padding-bottom: 17px; }
+  .eyebrow { font-size: 8px; letter-spacing: 1px; }
+  .topbar h1 { font-size: 24px; }
+  .clock-box span { font-size: 9px; }
+  .clock-box strong { font-size: 13px; }
+  .icon-btn { width: 35px; height: 35px; font-size: 17px; }
+
+  .welcome-row { align-items: flex-start; flex-wrap: wrap; margin-top: 20px; }
+  .welcome-row h2 { font-size: 19px; }
+
+  .stats-grid { gap: 9px; }
+  .stat-card { padding: 14px; }
+  .stat-card span { font-size: 10px; margin-bottom: 8px; min-height: 25px; }
+  .stat-card strong { font-size: 22px; }
+  .stat-card small { font-size: 9px; }
+
+  .panel { padding: 14px; border-radius: 12px; }
+  .chart-wrap { height: 220px; }
+  .attendance-grid { grid-template-columns: 1fr; }
+  .clock-actions { flex-direction: column; }
+  .date-row { grid-template-columns: 1fr; }
+
+  footer {
+    font-size: 8px;
+    flex-direction: column;
+    text-align: center;
+    line-height: 1.6;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LOADING PAGE
+     ============================================================ -->
+<div id="loading">
+  <div class="grid-pattern"></div>
+  <div class="load-inner">
+    <div class="load-logo">RH</div>
+    <h1 class="load-title">Royale Hermanos<br>Management System</h1>
+    <div class="load-sub">Bar Saloon · Team · Excellence</div>
+    <div class="load-progress"><div class="load-progress-fill" id="progressFill"></div></div>
+    <div class="load-status" id="loadStatus">Menyiapkan sistem...</div>
+  </div>
+  <div class="load-footer">Developed by <strong>Hugo Benicio</strong></div>
+</div>
+
+<!-- ============================================================
+     APP
+     ============================================================ -->
+<div class="app-shell" id="appShell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">RH</div>
+      <div class="brand-copy">
+        <strong>ROYALE HERMANOS</strong>
+        <span>MANAGEMENT SYSTEM</span>
+      </div>
+    </div>
+
+    <nav id="navigation">
+      <button class="nav-item active" data-view="dashboard">
+        <span class="nav-ico">▦</span>
+        <span class="nav-label" data-i18n="navDashboard">Dashboard</span>
+      </button>
+      <button class="nav-item" data-view="attendance">
+        <span class="nav-ico">◷</span>
+        <span class="nav-label" data-i18n="navAttendance">Absensi</span>
+      </button>
+      <button class="nav-item" data-view="tax">
+        <span class="nav-ico">💸</span>
+        <span class="nav-label" data-i18n="navTax">Cukai</span>
+      </button>
+      <button class="nav-item" data-view="rank">
+        <span class="nav-ico">♛</span>
+        <span class="nav-label" data-i18n="navRank">Rank</span>
+      </button>
+      <button class="nav-item" data-view="stats">
+        <span class="nav-ico">📊</span>
+        <span class="nav-label" data-i18n="navStats">Statistik</span>
+      </button>
+    </nav>
+
+    <div class="lang-switch">
+      <button onclick="setLang('id')" id="lang-id" class="active">ID</button>
+      <button onclick="setLang('en')" id="lang-en">EN</button>
+      <button onclick="setLang('my')" id="lang-my">MY</button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <span class="live-dot"></span>
+      <span data-i18n="systemReady">SYSTEM READY</span>
+      <small>Developed by Hugo Benicio</small>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow" data-i18n="eyebrow">OPERASIONAL BAR SALOON / KONTROL STAF</p>
+        <h1 id="page-title" data-i18n="navDashboard">Dashboard</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="clock-box">
+          <span id="current-date">--</span>
+          <strong id="current-time">--:--:--</strong>
+        </div>
+        <button id="refresh-btn" class="icon-btn" aria-label="Refresh" title="Refresh">↻</button>
+      </div>
+    </header>
+
+    <div id="notice" class="notice hidden" role="status"></div>
+
+    <!-- ============ VIEW: DASHBOARD ============ -->
+    <section id="view-dashboard" class="view">
+      <div class="welcome-row">
+        <div>
+          <h2 data-i18n="welcomeTitle">Selamat bertugas, Manager.</h2>
+          <p data-i18n="welcomeDesc">Pantau aktivitas tim Royale Hermanos Bar Saloon dalam satu tempat.</p>
+        </div>
+        <span class="date-pill" id="week-label" data-i18n="thisWeek">Minggu berjalan</span>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card">
+          <span data-i18n="totalEmployees">Total Karyawan</span>
+          <strong id="stat-employees">—</strong>
+          <small data-i18n="totalEmployeesDesc">Aktif terdaftar</small>
+        </article>
+        <article class="stat-card">
+          <span data-i18n="onDuty">On Duty</span>
+          <strong id="stat-on-duty" class="green-text">—</strong>
+          <small data-i18n="onDutyDesc">Sedang bekerja</small>
+        </article>
+        <article class="stat-card">
+          <span data-i18n="offDuty">Off Duty</span>
+          <strong id="stat-off-duty">—</strong>
+          <small data-i18n="offDutyDesc">Sudah clock out</small>
+        </article>
+        <article class="stat-card">
+          <span data-i18n="weeklyHours">Jam Kerja Minggu Ini</span>
+          <strong id="stat-hours">—</strong>
+          <small data-i18n="weeklyHoursDesc">Total durasi terselesaikan</small>
+        </article>
+      </div>
+
+      <div class="content-grid">
+        <article class="panel chart-panel">
+          <div class="panel-heading">
+            <div>
+              <h3 data-i18n="weeklyChartTitle">Jam Kerja Mingguan</h3>
+              <p data-i18n="weeklyChartDesc">Total jam per hari, minggu ini</p>
+            </div>
+            <span class="mini-tag">WEEKLY</span>
+          </div>
+          <div class="chart-wrap"><canvas id="weekly-chart"></canvas></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3 data-i18n="topWorkersTitle">Pekerja Terbaik</h3>
+              <p data-i18n="topWorkersDesc">Peringkat jam kerja minggu ini</p>
+            </div>
+            <span class="trophy">♛</span>
+          </div>
+          <div id="dashboard-ranking" class="ranking-list">
+            <div class="empty-state" data-i18n="loading">Memuat ranking…</div>
+          </div>
+        </article>
+      </div>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3 data-i18n="liveAttendanceTitle">Absensi Langsung</h3>
+            <p data-i18n="liveAttendanceDesc">Status shift karyawan</p>
+          </div>
+          <button class="text-button" data-goto="attendance">
+            <span data-i18n="seeAttendance">Lihat absensi →</span>
+          </button>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thEmployee">Karyawan</th>
+                <th data-i18n="thRole">Jabatan</th>
+                <th data-i18n="thClockIn">Clock In</th>
+                <th data-i18n="thDuration">Durasi Berjalan</th>
+                <th data-i18n="thStatus">Status</th>
+              </tr>
+            </thead>
+            <tbody id="live-attendance-body">
+              <tr><td colspan="5" class="empty-state" data-i18n="loading">Memuat data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ VIEW: ATTENDANCE ============ -->
+    <section id="view-attendance" class="view hidden">
+      <div class="welcome-row">
+        <div>
+          <h2 data-i18n="attendanceTitle">Kontrol Absensi</h2>
+          <p data-i18n="attendanceDesc">Catat mulai, selesai shift, atau ajukan libur.</p>
+        </div>
+      </div>
+
+      <div class="content-grid attendance-grid">
+        <!-- Clock In / Out dengan Tanggal -->
+        <article class="panel action-panel">
+          <div class="panel-heading">
+            <div>
+              <h3 data-i18n="clockInOutTitle">Clock In / Clock Out</h3>
+              <p data-i18n="clockInOutDesc">Pilih tanggal dan nama karyawan untuk mencatat shift.</p>
+            </div>
+          </div>
+          <form id="clock-form">
+            <label for="clock-date" data-i18n="formDate">Tanggal</label>
+            <input id="clock-date" type="date" required>
+
+            <label for="clock-employee" data-i18n="formEmployee">Karyawan</label>
+            <select id="clock-employee" required>
+              <option value="" data-i18n="selectEmployee">Pilih karyawan…</option>
+            </select>
+
+            <div class="clock-actions">
+              <button type="button" id="clock-in-btn" class="primary-btn">
+                <span>◷</span> <span data-i18n="btnClockIn">Clock In</span>
+              </button>
+              <button type="button" id="clock-out-btn" class="secondary-btn">
+                <span>✓</span> <span data-i18n="btnClockOut">Clock Out</span>
+              </button>
+            </div>
+
+            <p class="form-hint" data-i18n="clockHint">
+              Waktu absensi mengikuti zona waktu server.
+            </p>
+          </form>
+        </article>
+
+        <!-- Form Libur -->
+        <article class="panel action-panel">
+          <div class="panel-heading">
+            <div>
+              <h3 data-i18n="leaveTitle">Form Libur / Cuti</h3>
+              <p data-i18n="leaveDesc">Ajukan izin libur dan rekap otomatis.</p>
+            </div>
+          </div>
+          <form id="leave-form">
+            <label for="leave-employee" data-i18n="formEmployee">Karyawan</label>
+            <select id="leave-employee" required>
+              <option value="" data-i18n="selectEmployee">Pilih karyawan…</option>
+            </select>
+
+            <label for="leave-reason" data-i18n="formReason">Alasan cuti</label>
+            <select id="leave-reason" required>
+              <option value="" data-i18n="selectReason">Pilih alasan…</option>
+              <option value="Sakit" data-i18n="reasonSick">Sakit</option>
+              <option value="Izin Keluarga" data-i18n="reasonFamily">Izin Keluarga</option>
+              <option value="Cuti Tahunan" data-i18n="reasonAnnual">Cuti Tahunan</option>
+              <option value="Urusan Pribadi" data-i18n="reasonPersonal">Urusan Pribadi</option>
+              <option value="Lainnya" data-i18n="reasonOther">Lainnya</option>
+            </select>
+
+            <div class="date-row">
+              <div>
+                <label for="leave-from" data-i18n="formFrom">Dari tanggal</label>
+                <input id="leave-from" type="date" required>
+              </div>
+              <div>
+                <label for="leave-to" data-i18n="formTo">Sampai tanggal</label>
+                <input id="leave-to" type="date" required>
+              </div>
+            </div>
+
+            <button type="button" id="leave-submit-btn" class="primary-btn block-btn">
+              <span>📅</span> <span data-i18n="btnSubmitLeave">Ajukan Libur</span>
+            </button>
+
+            <p class="form-hint" data-i18n="leaveHint">
+              Pengajuan akan dikirim ke manajer melalui Discord.
+            </p>
+          </form>
+        </article>
+      </div>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3 data-i18n="activeShiftsTitle">Shift Sedang Berjalan</h3>
+            <p data-i18n="activeShiftsDesc">Durasi diperbarui otomatis.</p>
+          </div>
+          <span class="live-pill">
+            <span class="live-dot"></span> LIVE
+          </span>
+        </div>
+        <div id="active-shifts" class="active-shifts">
+          <div class="empty-state" data-i18n="noActiveShift">Tidak ada shift aktif.</div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3 data-i18n="historyTitle">Riwayat Absensi</h3>
+            <p data-i18n="historyDesc">Catatan shift terbaru.</p>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thDate">Tanggal</th>
+                <th data-i18n="thEmployee">Karyawan</th>
+                <th data-i18n="thClockIn">Clock In</th>
+                <th data-i18n="thClockOut">Clock Out</th>
+                <th data-i18n="thDuration">Durasi</th>
+                <th data-i18n="thStatus">Status</th>
+              </tr>
+            </thead>
+            <tbody id="attendance-history-body"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3 data-i18n="leaveHistoryTitle">Riwayat Libur</h3>
+            <p data-i18n="leaveHistoryDesc">Pengajuan cuti minggu ini.</p>
+          </div>
+        </div>
+        <div id="leave-history" class="active-shifts">
+          <div class="empty-state" data-i18n="noLeaveHistory">Belum ada pengajuan libur.</div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ VIEW: TAX ============ -->
+    <section id="view-tax" class="view hidden">
+      <div class="welcome-row">
+        <div>
+          <h2 data-i18n="taxTitle">Pembayaran Cukai</h2>
+          <p data-i18n="taxDesc">Upload bukti bayar cukai langsung ke Discord.</p>
+        </div>
+      </div>
+
+      <div class="content-grid attendance-grid">
+        <article class="panel action-panel">
+          <div class="panel-heading">
+            <div>
+              <h3 data-i18n="uploadTaxTitle">Upload Bukti Cukai</h3>
+              <p data-i18n="uploadTaxDesc">Bukti terkirim otomatis ke channel Discord.</p>
+            </div>
+          </div>
+
+          <label for="tax-employee" data-i18n="formEmployee">Karyawan</label>
+          <select id="tax-employee">
+            <option value="" data-i18n="selectEmployee">Pilih karyawan…</option>
+          </select>
+
+          <label for="tax-amount" data-i18n="formAmount">Nominal cukai</label>
+          <input id="tax-amount" type="number" placeholder="0" data-i18n-placeholder="amountPlaceholder">
+
+          <label data-i18n="formProof">Foto bukti</label>
+          <div class="drop-zone" id="drop-zone" onclick="document.getElementById('tax-file').click()">
+            <div class="drop-ico">📸</div>
+            <div class="drop-text" data-i18n="dropText">Klik, drag & drop, atau paste foto</div>
+            <div class="drop-hint" data-i18n="dropHint">Ctrl+V untuk paste · Drag file ke sini · Klik untuk pilih</div>
+            <img id="tax-preview" class="tax-preview" alt="preview">
+          </div>
+          <input type="file" id="tax-file" accept="image/*" hidden>
+
+          <button type="button" id="tax-upload-btn" class="primary-btn block-btn">
+            <span>⇪</span> <span data-i18n="btnUpload">Kirim Bukti Cukai</span>
+          </button>
+
+          <p class="form-hint" data-i18n="taxHint">
+            Maks 5MB per foto. Format JPG, PNG, atau WEBP.
+          </p>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3 data-i18n="taxHistoryTitle">Riwayat Cukai</h3>
+              <p data-i18n="taxHistoryDesc">Cukai minggu ini.</p>
+            </div>
+          </div>
+          <div id="tax-history" class="active-shifts">
+            <div class="empty-state" data-i18n="noTaxHistory">Belum ada pembayaran cukai.</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: RANK ============ -->
+    <section id="view-rank" class="view hidden">
+      <div class="welcome-row">
+        <div>
+          <h2 data-i18n="rankTitle">Peringkat Pekerja</h2>
+          <p data-i18n="rankDesc">Diurutkan berdasarkan total jam kerja minggu ini.</p>
+        </div>
+        <span class="date-pill" id="rank-week-label" data-i18n="thisWeek">Minggu berjalan</span>
+      </div>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3 data-i18n="rankListTitle">Top Pekerja Minggu Ini</h3>
+            <p data-i18n="rankListDesc">Peringkat 1-3 dapat bonus dari boss.</p>
+          </div>
+          <span class="trophy">♛</span>
+        </div>
+        <div id="full-ranking" class="full-ranking">
+          <div class="empty-state" data-i18n="loading">Memuat ranking…</div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ VIEW: STATS ============ -->
+    <section id="view-stats" class="view hidden">
+      <div class="welcome-row">
+        <div>
+          <h2 data-i18n="statsTitle">Statistik</h2>
+          <p data-i18n="statsDesc">Visualisasi jam kerja dan performa tim.</p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card">
+          <span data-i18n="statsTotal">Total Jam</span>
+          <strong id="stats-total" class="burgundy-text">—</strong>
+        </article>
+        <article class="stat-card">
+          <span data-i18n="statsAvg">Rata-rata / Karyawan</span>
+          <strong id="stats-avg">—</strong>
+        </article>
+        <article class="stat-card">
+          <span data-i18n="statsMax">Jam Tertinggi</span>
+          <strong id="stats-max">—</strong>
+        </article>
+        <article class="stat-card">
+          <span data-i18n="statsShifts">Total Shift</span>
+          <strong id="stats-shifts">—</strong>
+        </article>
+      </div>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3 data-i18n="chartTitle">Visualisasi Jam Kerja</h3>
+            <p data-i18n="chartDesc">Pilih tampilan chart yang diinginkan.</p>
+          </div>
+        </div>
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-chart="bar" data-i18n="chartBar">Bar</button>
+          <button class="chart-tab" data-chart="doughnut" data-i18n="chartDoughnut">Donut</button>
+          <button class="chart-tab" data-chart="radar" data-i18n="chartRadar">Radar</button>
+        </div>
+        <div class="chart-wrap" style="height:280px">
+          <canvas id="stats-chart"></canvas>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3 data-i18n="detailsTitle">Detail Per Karyawan</h3>
+            <p data-i18n="detailsDesc">Total jam kerja minggu ini.</p>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th data-i18n="thEmployee">Karyawan</th>
+                <th data-i18n="thRole">Jabatan</th>
+                <th data-i18n="thTotalHours">Total Jam</th>
+                <th data-i18n="thShifts">Shift</th>
+              </tr>
+            </thead>
+            <tbody id="stats-detail-body"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      <span>ROYALE HERMANOS MANAGEMENT SYSTEM</span>
+      <span>DEVELOPED BY HUGO BENICIO</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   ROYALE HERMANOS MANAGEMENT SYSTEM
+   Bar Saloon Edition
+   ============================================================ */
+
+// ============================================================
+// KONFIGURASI — ganti dengan URL Web App Anda
+// ============================================================
+const API_URL = "https://script.google.com/macros/s/AKfycbyZ0zw0PpP8vwxQG-BeUmfcXyoOHH4kCpcctyNt2eFjMVvnkiLtqCwA2Fp2rW5672G3/exec";
+
+const $ = (id) => document.getElementById(id);
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  employees: [],
+  attendance: [],
+  taxes: [],
+  leaves: [],
+  dashboard: null,
+  lang: 'id',
+  chart: null,
+  statsChart: null,
+  taxFile: null,
+};
+
+// ============================================================
+// BAHASA
+// ============================================================
+const T = {
+  id: {
+    navDashboard:'Dashboard', navAttendance:'Absensi', navTax:'Cukai',
+    navRank:'Rank', navStats:'Statistik',
+    eyebrow:'OPERASIONAL BAR SALOON / KONTROL STAF',
+    systemReady:'SISTEM SIAP',
+    welcomeTitle:'Selamat bertugas, Manager.',
+    welcomeDesc:'Pantau aktivitas tim Royale Hermanos Bar Saloon dalam satu tempat.',
+    thisWeek:'Minggu berjalan',
+    totalEmployees:'Total Karyawan', totalEmployeesDesc:'Aktif terdaftar',
+    onDuty:'On Duty', onDutyDesc:'Sedang bekerja',
+    offDuty:'Off Duty', offDutyDesc:'Sudah clock out',
+    weeklyHours:'Jam Kerja Minggu Ini', weeklyHoursDesc:'Total durasi terselesaikan',
+    weeklyChartTitle:'Jam Kerja Mingguan', weeklyChartDesc:'Total jam per hari, minggu ini',
+    topWorkersTitle:'Pekerja Terbaik', topWorkersDesc:'Peringkat jam kerja minggu ini',
+    liveAttendanceTitle:'Absensi Langsung', liveAttendanceDesc:'Status shift karyawan',
+    seeAttendance:'Lihat absensi →',
+    thEmployee:'Karyawan', thRole:'Jabatan', thClockIn:'Clock In',
+    thClockOut:'Clock Out', thDuration:'Durasi', thStatus:'Status',
+    thDate:'Tanggal', thTotalHours:'Total Jam', thShifts:'Shift',
+    loading:'Memuat…',
+    attendanceTitle:'Kontrol Absensi',
+    attendanceDesc:'Catat mulai, selesai shift, atau ajukan libur.',
+    clockInOutTitle:'Clock In / Clock Out',
+    clockInOutDesc:'Pilih tanggal dan nama karyawan untuk mencatat shift.',
+    formDate:'Tanggal',
+    formEmployee:'Karyawan',
+    selectEmployee:'Pilih karyawan…',
+    btnClockIn:'Clock In', btnClockOut:'Clock Out',
+    clockHint:'Waktu absensi mengikuti zona waktu server.',
+    activeShiftsTitle:'Shift Sedang Berjalan',
+    activeShiftsDesc:'Durasi diperbarui otomatis.',
+    noActiveShift:'Tidak ada shift aktif.',
+    historyTitle:'Riwayat Absensi', historyDesc:'Catatan shift terbaru.',
+    // Libur
+    leaveTitle:'Form Libur / Cuti',
+    leaveDesc:'Ajukan izin libur dan rekap otomatis.',
+    formReason:'Alasan cuti',
+    selectReason:'Pilih alasan…',
+    reasonSick:'Sakit',
+    reasonFamily:'Izin Keluarga',
+    reasonAnnual:'Cuti Tahunan',
+    reasonPersonal:'Urusan Pribadi',
+    reasonOther:'Lainnya',
+    formFrom:'Dari tanggal',
+    formTo:'Sampai tanggal',
+    btnSubmitLeave:'Ajukan Libur',
+    leaveHint:'Pengajuan akan dikirim ke manajer melalui Discord.',
+    leaveHistoryTitle:'Riwayat Libur',
+    leaveHistoryDesc:'Pengajuan cuti minggu ini.',
+    noLeaveHistory:'Belum ada pengajuan libur.',
+    // Cukai
+    taxTitle:'Pembayaran Cukai',
+    taxDesc:'Upload bukti bayar cukai langsung ke Discord.',
+    uploadTaxTitle:'Upload Bukti Cukai',
+    uploadTaxDesc:'Bukti terkirim otomatis ke channel Discord.',
+    formAmount:'Nominal cukai',
+    amountPlaceholder:'0',
+    formProof:'Foto bukti',
+    dropText:'Klik, drag & drop, atau paste foto',
+    dropHint:'Ctrl+V untuk paste · Drag file ke sini · Klik untuk pilih',
+    btnUpload:'Kirim Bukti Cukai',
+    taxHint:'Maks 5MB per foto. Format JPG, PNG, atau WEBP.',
+    taxHistoryTitle:'Riwayat Cukai', taxHistoryDesc:'Cukai minggu ini.',
+    noTaxHistory:'Belum ada pembayaran cukai.',
+    // Rank
+    rankTitle:'Peringkat Pekerja',
+    rankDesc:'Diurutkan berdasarkan total jam kerja minggu ini.',
+    rankListTitle:'Top Pekerja Minggu Ini',
+    rankListDesc:'Peringkat 1-3 dapat bonus dari boss.',
+    // Stats
+    statsTitle:'Statistik', statsDesc:'Visualisasi jam kerja dan performa tim.',
+    statsTotal:'Total Jam', statsAvg:'Rata-rata / Karyawan',
+    statsMax:'Jam Tertinggi', statsShifts:'Total Shift',
+    chartTitle:'Visualisasi Jam Kerja', chartDesc:'Pilih tampilan chart yang diinginkan.',
+    chartBar:'Bar', chartDoughnut:'Donut', chartRadar:'Radar',
+    detailsTitle:'Detail Per Karyawan', detailsDesc:'Total jam kerja minggu ini.',
+    // Errors
+    errSelect:'Pilih karyawan dulu.',
+    errDate:'Pilih tanggal dulu.',
+    errPhoto:'Upload foto bukti dulu.',
+    errAmount:'Isi nominal cukai dulu.',
+    errFile:'File harus berupa gambar.',
+    errSize:'File terlalu besar (maks 5MB).',
+    errNoAPI:'URL Apps Script belum diatur.',
+    errLeaveEmployee:'Pilih karyawan dulu.',
+    errLeaveReason:'Pilih alasan cuti.',
+    errLeaveDates:'Isi tanggal mulai dan tanggal selesai.',
+    errLeaveRange:'Tanggal selesai harus setelah tanggal mulai.',
+    // Messages
+    loadingData:'Memuat data…',
+    msgClockIn:'Clock in tercatat. Selamat bekerja!',
+    msgClockOut:'Clock out tercatat. Shift selesai.',
+    msgUpload:'Bukti cukai terkirim ke Discord.',
+    msgLeaveSubmitted:'Pengajuan libur terkirim ke Discord.',
+    msgRefreshed:'Data berhasil diperbarui.',
+  },
+  en: {
+    navDashboard:'Dashboard', navAttendance:'Attendance', navTax:'Tax',
+    navRank:'Rank', navStats:'Stats',
+    eyebrow:'BAR SALOON OPERATIONS / STAFF CONTROL',
+    systemReady:'SYSTEM READY',
+    welcomeTitle:'Good shift, Manager.',
+    welcomeDesc:'Monitor Royale Hermanos Bar Saloon team activity in one place.',
+    thisWeek:'Current week',
+    totalEmployees:'Total Employees', totalEmployeesDesc:'Active registered',
+    onDuty:'On Duty', onDutyDesc:'Currently working',
+    offDuty:'Off Duty', offDutyDesc:'Clocked out',
+    weeklyHours:'Weekly Work Hours', weeklyHoursDesc:'Total completed duration',
+    weeklyChartTitle:'Weekly Work Hours', weeklyChartDesc:'Total hours per day, this week',
+    topWorkersTitle:'Top Workers', topWorkersDesc:'Work hours ranking this week',
+    liveAttendanceTitle:'Live Attendance', liveAttendanceDesc:'Employee shift status',
+    seeAttendance:'See attendance →',
+    thEmployee:'Employee', thRole:'Role', thClockIn:'Clock In',
+    thClockOut:'Clock Out', thDuration:'Duration', thStatus:'Status',
+    thDate:'Date', thTotalHours:'Total Hours', thShifts:'Shifts',
+    loading:'Loading…',
+    attendanceTitle:'Attendance Control',
+    attendanceDesc:'Log shift start, end, or submit leave request.',
+    clockInOutTitle:'Clock In / Clock Out',
+    clockInOutDesc:'Select date and employee name to log shift.',
+    formDate:'Date',
+    formEmployee:'Employee',
+    selectEmployee:'Select employee…',
+    btnClockIn:'Clock In', btnClockOut:'Clock Out',
+    clockHint:'Attendance follows server timezone.',
+    activeShiftsTitle:'Active Shifts',
+    activeShiftsDesc:'Duration updated automatically.',
+    noActiveShift:'No active shift.',
+    historyTitle:'Attendance History', historyDesc:'Recent shift records.',
+    // Leave
+    leaveTitle:'Leave / Time-Off Form',
+    leaveDesc:'Submit leave request for manager approval.',
+    formReason:'Leave reason',
+    selectReason:'Select reason…',
+    reasonSick:'Sick Leave',
+    reasonFamily:'Family Emergency',
+    reasonAnnual:'Annual Leave',
+    reasonPersonal:'Personal Matter',
+    reasonOther:'Other',
+    formFrom:'From date',
+    formTo:'To date',
+    btnSubmitLeave:'Submit Leave',
+    leaveHint:'Request will be sent to manager via Discord.',
+    leaveHistoryTitle:'Leave History',
+    leaveHistoryDesc:'This week leave requests.',
+    noLeaveHistory:'No leave request yet.',
+    // Tax
+    taxTitle:'Tax Payment',
+    taxDesc:'Upload tax payment proof directly to Discord.',
+    uploadTaxTitle:'Upload Tax Proof',
+    uploadTaxDesc:'Proof is sent automatically to Discord channel.',
+    formAmount:'Tax amount',
+    amountPlaceholder:'0',
+    formProof:'Proof photo',
+    dropText:'Click, drag & drop, or paste photo',
+    dropHint:'Ctrl+V to paste · Drag file here · Click to select',
+    btnUpload:'Send Tax Proof',
+    taxHint:'Max 5MB per photo. JPG, PNG, or WEBP format.',
+    taxHistoryTitle:'Tax History', taxHistoryDesc:'This week payments.',
+    noTaxHistory:'No tax payment yet.',
+    // Rank
+    rankTitle:'Employee Ranking',
+    rankDesc:'Sorted by total work hours this week.',
+    rankListTitle:'Top Workers This Week',
+    rankListDesc:'Rank 1-3 get bonus from boss.',
+    // Stats
+    statsTitle:'Statistics', statsDesc:'Work hours and team performance visualization.',
+    statsTotal:'Total Hours', statsAvg:'Average / Employee',
+    statsMax:'Highest Hours', statsShifts:'Total Shifts',
+    chartTitle:'Work Hours Visualization', chartDesc:'Choose chart display.',
+    chartBar:'Bar', chartDoughnut:'Donut', chartRadar:'Radar',
+    detailsTitle:'Details Per Employee', detailsDesc:'Total work hours this week.',
+    // Errors
+    errSelect:'Select employee first.',
+    errDate:'Select date first.',
+    errPhoto:'Upload proof photo first.',
+    errAmount:'Enter tax amount first.',
+    errFile:'File must be an image.',
+    errSize:'File too large (max 5MB).',
+    errNoAPI:'Apps Script URL not configured.',
+    errLeaveEmployee:'Select employee first.',
+    errLeaveReason:'Select leave reason.',
+    errLeaveDates:'Fill both start and end date.',
+    errLeaveRange:'End date must be after start date.',
+    // Messages
+    loadingData:'Loading data…',
+    msgClockIn:'Clock in recorded. Have a good shift!',
+    msgClockOut:'Clock out recorded. Shift ended.',
+    msgUpload:'Tax proof sent to Discord.',
+    msgLeaveSubmitted:'Leave request sent to Discord.',
+    msgRefreshed:'Data refreshed.',
+  },
+  my: {
+    navDashboard:'Papan Pemuka', navAttendance:'Kehadiran', navTax:'Cukai',
+    navRank:'Rank', navStats:'Statistik',
+    eyebrow:'OPERASI BAR SALOON / KAWALAN STAF',
+    systemReady:'SISTEM SEDIA',
+    welcomeTitle:'Selamat bertugas, Manager.',
+    welcomeDesc:'Pantau aktiviti pasukan Royale Hermanos Bar Saloon di satu tempat.',
+    thisWeek:'Minggu semasa',
+    totalEmployees:'Jumlah Pekerja', totalEmployeesDesc:'Aktif berdaftar',
+    onDuty:'On Duty', onDutyDesc:'Sedang bekerja',
+    offDuty:'Off Duty', offDutyDesc:'Sudah clock out',
+    weeklyHours:'Jam Kerja Minggu Ini', weeklyHoursDesc:'Jumlah durasi selesai',
+    weeklyChartTitle:'Jam Kerja Mingguan', weeklyChartDesc:'Jumlah jam sehari, minggu ini',
+    topWorkersTitle:'Pekerja Terbaik', topWorkersDesc:'Kedudukan jam kerja minggu ini',
+    liveAttendanceTitle:'Kehadiran Langsung', liveAttendanceDesc:'Status syif pekerja',
+    seeAttendance:'Lihat kehadiran →',
+    thEmployee:'Pekerja', thRole:'Jawatan', thClockIn:'Clock In',
+    thClockOut:'Clock Out', thDuration:'Tempoh', thStatus:'Status',
+    thDate:'Tarikh', thTotalHours:'Jumlah Jam', thShifts:'Syif',
+    loading:'Memuatkan…',
+    attendanceTitle:'Kawalan Kehadiran',
+    attendanceDesc:'Catat mula, tamat syif, atau hantar permohonan cuti.',
+    clockInOutTitle:'Clock In / Clock Out',
+    clockInOutDesc:'Pilih tarikh dan nama pekerja untuk catat syif.',
+    formDate:'Tarikh',
+    formEmployee:'Pekerja',
+    selectEmployee:'Pilih pekerja…',
+    btnClockIn:'Clock In', btnClockOut:'Clock Out',
+    clockHint:'Kehadiran ikut zon masa pelayan.',
+    activeShiftsTitle:'Syif Sedang Berjalan',
+    activeShiftsDesc:'Tempoh dikemas kini automatik.',
+    noActiveShift:'Tiada syif aktif.',
+    historyTitle:'Sejarah Kehadiran', historyDesc:'Rekod syif terkini.',
+    // Leave
+    leaveTitle:'Borang Cuti / Rehat',
+    leaveDesc:'Hantar permohonan cuti untuk kelulusan pengurus.',
+    formReason:'Sebab cuti',
+    selectReason:'Pilih sebab…',
+    reasonSick:'Cuti Sakit',
+    reasonFamily:'Urusan Keluarga',
+    reasonAnnual:'Cuti Tahunan',
+    reasonPersonal:'Urusan Peribadi',
+    reasonOther:'Lain-lain',
+    formFrom:'Dari tarikh',
+    formTo:'Sampai tarikh',
+    btnSubmitLeave:'Hantar Cuti',
+    leaveHint:'Permohonan akan dihantar kepada pengurus melalui Discord.',
+    leaveHistoryTitle:'Sejarah Cuti',
+    leaveHistoryDesc:'Permohonan cuti minggu ini.',
+    noLeaveHistory:'Tiada permohonan cuti lagi.',
+    // Tax
+    taxTitle:'Pembayaran Cukai',
+    taxDesc:'Muat naik bukti bayar cukai terus ke Discord.',
+    uploadTaxTitle:'Muat Naik Bukti Cukai',
+    uploadTaxDesc:'Bukti dihantar automatik ke saluran Discord.',
+    formAmount:'Jumlah cukai',
+    amountPlaceholder:'0',
+    formProof:'Foto bukti',
+    dropText:'Klik, drag & drop, atau tampal foto',
+    dropHint:'Ctrl+V untuk tampal · Drag fail ke sini · Klik untuk pilih',
+    btnUpload:'Hantar Bukti Cukai',
+    taxHint:'Maks 5MB setiap foto. Format JPG, PNG, atau WEBP.',
+    taxHistoryTitle:'Sejarah Cukai', taxHistoryDesc:'Cukai minggu ini.',
+    noTaxHistory:'Tiada bayaran cukai lagi.',
+    // Rank
+    rankTitle:'Kedudukan Pekerja',
+    rankDesc:'Disusun ikut jumlah jam kerja minggu ini.',
+    rankListTitle:'Pekerja Terbaik Minggu Ini',
+    rankListDesc:'Kedudukan 1-3 dapat bonus dari boss.',
+    // Stats
+    statsTitle:'Statistik', statsDesc:'Visualisasi jam kerja dan prestasi pasukan.',
+    statsTotal:'Jumlah Jam', statsAvg:'Purata / Pekerja',
+    statsMax:'Jam Tertinggi', statsShifts:'Jumlah Syif',
+    chartTitle:'Visualisasi Jam Kerja', chartDesc:'Pilih paparan carta.',
+    chartBar:'Bar', chartDoughnut:'Donut', chartRadar:'Radar',
+    detailsTitle:'Butiran Setiap Pekerja', detailsDesc:'Jumlah jam kerja minggu ini.',
+    // Errors
+    errSelect:'Pilih pekerja dulu.',
+    errDate:'Pilih tarikh dulu.',
+    errPhoto:'Muat naik foto bukti dulu.',
+    errAmount:'Isi jumlah cukai dulu.',
+    errFile:'Fail mesti imej.',
+    errSize:'Fail terlalu besar (maks 5MB).',
+    errNoAPI:'URL Apps Script belum diatur.',
+    errLeaveEmployee:'Pilih pekerja dulu.',
+    errLeaveReason:'Pilih sebab cuti.',
+    errLeaveDates:'Isi tarikh mula dan tarikh tamat.',
+    errLeaveRange:'Tarikh tamat mesti selepas tarikh mula.',
+    // Messages
+    loadingData:'Memuatkan data…',
+    msgClockIn:'Clock in direkod. Selamat bekerja!',
+    msgClockOut:'Clock out direkod. Syif tamat.',
+    msgUpload:'Bukti cukai dihantar ke Discord.',
+    msgLeaveSubmitted:'Permohonan cuti dihantar ke Discord.',
+    msgRefreshed:'Data dikemas kini.',
+  }
+};
+
+function t(key) {
+  return (T[state.lang] && T[state.lang][key]) || T.id[key] || key;
+}
+
+function setLang(lang) {
+  state.lang = lang;
+  ['id','en','my'].forEach(x => {
+    const el = document.getElementById('lang-' + x);
+    if (el) el.classList.toggle('active', x === lang);
+  });
+  applyLanguage();
+}
+
+function applyLanguage() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[state.lang][key]) el.textContent = T[state.lang][key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (T[state.lang][key]) el.placeholder = T[state.lang][key];
+  });
+  const activeNav = document.querySelector('.nav-item.active');
+  if (activeNav) {
+    const view = activeNav.dataset.view;
+    const map = { dashboard:'navDashboard', attendance:'navAttendance', tax:'navTax', rank:'navRank', stats:'navStats' };
+    const title = $('page-title');
+    if (title && map[view]) title.textContent = t(map[view]);
+  }
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function fmtHours(minutes) {
+  const n = Math.max(0, Number(minutes) || 0);
+  const h = Math.floor(n / 60);
+  const m = n % 60;
+  return `${h}j ${String(m).padStart(2,'0')}m`;
+}
+function fmtTime(v) {
+  if (!v) return '—';
+  const d = new Date(v);
+  if (Number.isNaN(d.getTime())) return String(v);
+  return d.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+}
+function fmtDate(v) {
+  if (!v) return '—';
+  const d = new Date(v);
+  if (Number.isNaN(d.getTime())) return String(v);
+  return d.toLocaleDateString('id-ID', {day:'2-digit',month:'short',year:'numeric'});
+}
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function notify(message, error = false) {
+  const n = $('notice');
+  if (!n) return;
+  n.textContent = message;
+  n.classList.remove('hidden', 'error');
+  if (error) n.classList.add('error');
+  clearTimeout(notify.timer);
+  notify.timer = setTimeout(() => n.classList.add('hidden'), 5000);
+}
+function setBusy(btn, busy, label) {
+  if (!btn) return;
+  if (!btn.dataset.original) btn.dataset.original = btn.textContent.trim();
+  btn.disabled = busy;
+  btn.textContent = busy ? '…' : (label || btn.dataset.original);
+}
+function apiReady() {
+  return API_URL && API_URL.startsWith('https://script.google.com/');
+}
+function setDefaultDate() {
+  const today = new Date().toISOString().split('T')[0];
+  const clockDate = $('clock-date');
+  if (clockDate && !clockDate.value) clockDate.value = today;
+}
+
+// ============================================================
+// API CALLS
+// ============================================================
+function jsonp(action, params = {}) {
+  return new Promise((resolve, reject) => {
+    if (!apiReady()) return reject(new Error(t('errNoAPI')));
+    const cb = 'rhcb_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => { cleanup(); reject(new Error('Server timeout.')); }, 15000);
+    function cleanup() {
+      clearTimeout(timeout);
+      delete window[cb];
+      script.remove();
+    }
+    window[cb] = (data) => {
+      cleanup();
+      if (data && data.ok) resolve(data);
+      else reject(new Error(data?.error || 'Request failed.'));
+    };
+    const q = new URLSearchParams({ ...params, action, callback: cb });
+    script.src = API_URL + '?' + q.toString();
+    script.onerror = () => { cleanup(); reject(new Error('Cannot reach Apps Script.')); };
+    document.body.appendChild(script);
+  });
+}
+
+async function post(action, payload = {}) {
+  if (!apiReady()) throw new Error(t('errNoAPI'));
+  await fetch(API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    redirect: 'follow',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action, ...payload }),
+  });
+  await new Promise(r => setTimeout(r, 1200));
+}
+
+// ============================================================
+// VIEW SWITCHER
+// ============================================================
+function switchView(view) {
+  document.querySelectorAll('.view').forEach(el => el.classList.add('hidden'));
+  const target = $('view-' + view);
+  if (target) target.classList.remove('hidden');
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.view === view);
+  });
+  const map = { dashboard:'navDashboard', attendance:'navAttendance', tax:'navTax', rank:'navRank', stats:'navStats' };
+  const title = $('page-title');
+  if (title && map[view]) title.textContent = t(map[view]);
+  if (view === 'rank') renderRank();
+  if (view === 'stats') renderStats();
+}
+
+// ============================================================
+// RENDER: DASHBOARD
+// ============================================================
+function liveDuration(clockIn) {
+  const start = new Date(clockIn).getTime();
+  if (Number.isNaN(start)) return '—';
+  return fmtHours(Math.floor(Math.max(0, Date.now() - start) / 60000));
+}
+function statusBadge(on) {
+  return `<span class="status ${on ? 'on' : 'off'}">${on ? 'ON DUTY' : 'OFF DUTY'}</span>`;
+}
+
+function renderDashboard() {
+  const d = state.dashboard || {};
+  const employees = state.employees.filter(e => e.active !== false);
+  const active = state.attendance.filter(a => a.status === 'ON DUTY');
+  const onCount = active.length;
+  const totalCount = employees.length;
+
+  $('stat-employees').textContent = totalCount;
+  $('stat-on-duty').textContent = onCount;
+  $('stat-off-duty').textContent = Math.max(0, totalCount - onCount);
+  $('stat-hours').textContent = fmtHours(d.weeklyMinutes ?? 0);
+  if (d.weekLabel) $('week-label').textContent = d.weekLabel;
+
+  $('live-attendance-body').innerHTML = active.length
+    ? active.map(a => `
+      <tr>
+        <td>${escapeHtml(a.name)}</td>
+        <td>${escapeHtml(a.role || '—')}</td>
+        <td>${fmtTime(a.clockIn)}</td>
+        <td>${liveDuration(a.clockIn)}</td>
+        <td>${statusBadge(true)}</td>
+      </tr>
+    `).join('')
+    : `<tr><td colspan="5" class="empty-state">${t('noActiveShift')}</td></tr>`;
+
+  const ranking = (d.ranking || []).slice(0, 5);
+  $('dashboard-ranking').innerHTML = ranking.length
+    ? ranking.map((r, i) => `
+      <div class="ranking-item">
+        <div class="rank-number">${i + 1}</div>
+        <div>
+          <div class="rank-name">${escapeHtml(r.name)}</div>
+          <div class="rank-role">${escapeHtml(r.role || 'Karyawan')}</div>
+        </div>
+        <div class="rank-hours">${fmtHours(r.minutes)}</div>
+      </div>
+    `).join('')
+    : `<div class="empty-state">${t('loading')}</div>`;
+
+  renderWeeklyChart(d.daily || []);
+}
+
+function renderWeeklyChart(daily) {
+  if (!window.Chart) return;
+  const labels = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+  const values = labels.map((_, i) => {
+    const found = daily.find(x => Number(x.dayIndex) === i);
+    return found ? Math.round(found.minutes / 60 * 10) / 10 : 0;
+  });
+  if (state.chart) state.chart.destroy();
+  const canvas = $('weekly-chart');
+  if (!canvas) return;
+  state.chart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Jam kerja',
+        data: values,
+        backgroundColor: (ctx) => {
+          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 250);
+          g.addColorStop(0, '#A32638');
+          g.addColorStop(1, 'rgba(128, 0, 32, 0.5)');
+          return g;
+        },
+        borderRadius: 6,
+        maxBarThickness: 32,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1A0E12',
+          titleColor: '#F5E6E8',
+          bodyColor: '#E8B4B8',
+          borderColor: 'rgba(163,38,56,0.4)',
+          borderWidth: 1,
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: { label: c => `${c.raw} jam` },
+        },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: '#A88F94', font: { size: 11, weight: '600' } },
+          border: { display: false },
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(232,180,184,0.06)' },
+          ticks: { color: '#A88F94', font: { size: 10 } },
+          border: { display: false },
+        },
+      },
+    },
+  });
+}
+
+// ============================================================
+// RENDER: ATTENDANCE
+// ============================================================
+function renderAttendance() {
+  const active = state.attendance.filter(a => a.status === 'ON DUTY');
+  $('active-shifts').innerHTML = active.length
+    ? active.map(a => `
+      <div class="active-shift">
+        <div>
+          <strong>${escapeHtml(a.name)}</strong>
+          <small>${escapeHtml(a.role || '')} · Clock in ${fmtTime(a.clockIn)}</small>
+        </div>
+        <div class="elapsed">${liveDuration(a.clockIn)}</div>
+      </div>
+    `).join('')
+    : `<div class="empty-state">${t('noActiveShift')}</div>`;
+
+  const history = state.attendance
+    .slice()
+    .sort((a, b) => new Date(b.clockIn) - new Date(a.clockIn))
+    .slice(0, 40);
+
+  $('attendance-history-body').innerHTML = history.length
+    ? history.map(a => `
+      <tr>
+        <td>${fmtDate(a.clockIn)}</td>
+        <td>${escapeHtml(a.name)}</td>
+        <td>${fmtTime(a.clockIn)}</td>
+        <td>${fmtTime(a.clockOut)}</td>
+        <td>${a.clockOut ? fmtHours(a.durationMinutes) : liveDuration(a.clockIn)}</td>
+        <td>${statusBadge(a.status === 'ON DUTY')}</td>
+      </tr>
+    `).join('')
+    : `<tr><td colspan="6" class="empty-state">—</td></tr>`;
+
+  const select = $('clock-employee');
+  if (select) {
+    const prev = select.value;
+    select.innerHTML = `<option value="">${t('selectEmployee')}</option>` +
+      state.employees
+        .filter(e => e.active !== false)
+        .map(e => `<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)} — ${escapeHtml(e.role || '')}</option>`)
+        .join('');
+    if (prev) select.value = prev;
+  }
+
+  const taxSelect = $('tax-employee');
+  if (taxSelect) {
+    const prev = taxSelect.value;
+    taxSelect.innerHTML = `<option value="">${t('selectEmployee')}</option>` +
+      state.employees
+        .filter(e => e.active !== false)
+        .map(e => `<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)}</option>`)
+        .join('');
+    if (prev) taxSelect.value = prev;
+  }
+
+  const leaveSelect = $('leave-employee');
+  if (leaveSelect) {
+    const prev = leaveSelect.value;
+    leaveSelect.innerHTML = `<option value="">${t('selectEmployee')}</option>` +
+      state.employees
+        .filter(e => e.active !== false)
+        .map(e => `<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)}</option>`)
+        .join('');
+    if (prev) leaveSelect.value = prev;
+  }
+}
+
+// ============================================================
+// RENDER: TAX
+// ============================================================
+function renderTax() {
+  const list = state.taxes || [];
+  const container = $('tax-history');
+  if (!container) return;
+  container.innerHTML = list.length
+    ? list.slice(0, 15).map(x => `
+      <div class="active-shift">
+        <div>
+          <strong>${escapeHtml(x.name)}</strong>
+          <small>${fmtDate(x.timestamp)} · Rp ${Number(x.amount || 0).toLocaleString('id-ID')}</small>
+        </div>
+        <div class="elapsed" style="color:#A88F94">${escapeHtml(x.status || 'SENT')}</div>
+      </div>
+    `).join('')
+    : `<div class="empty-state">${t('noTaxHistory')}</div>`;
+}
+
+// ============================================================
+// RENDER: LEAVE HISTORY
+// ============================================================
+function renderLeaveHistory() {
+  const list = state.leaves || [];
+  const container = $('leave-history');
+  if (!container) return;
+
+  container.innerHTML = list.length
+    ? list.slice(0, 10).map(x => `
+      <div class="leave-item">
+        <div class="info">
+          <strong>${escapeHtml(x.name)}</strong>
+          <span class="badge-reason">${escapeHtml(x.reason)}</span>
+          <small style="margin-top:6px">${fmtDate(x.dateFrom)} — ${fmtDate(x.dateTo)}</small>
+        </div>
+        <div class="dates">${x.totalDays || 0} hari</div>
+      </div>
+    `).join('')
+    : `<div class="empty-state">${t('noLeaveHistory')}</div>`;
+}
+
+// ============================================================
+// RENDER: RANK
+// ============================================================
+function renderRank() {
+  const ranking = (state.dashboard?.ranking || []).slice();
+  const container = $('full-ranking');
+  if (!container) return;
+
+  if (!ranking.length) {
+    container.innerHTML = `<div class="empty-state">${t('loading')}</div>`;
+    return;
+  }
+
+  container.innerHTML = ranking.map((r, i) => {
+    const topClass = i < 3 ? ' top-' + (i + 1) : '';
+    return `
+      <div class="full-rank-item${topClass}">
+        <div class="full-rank-num">${i + 1}</div>
+        <div class="full-rank-info">
+          <div class="full-rank-name">${escapeHtml(r.name)}</div>
+          <div class="full-rank-role">${escapeHtml(r.role || 'Karyawan')}</div>
+        </div>
+        <div class="full-rank-hours">${fmtHours(r.minutes)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// RENDER: STATS
+// ============================================================
+function renderStats() {
+  const ranking = state.dashboard?.ranking || [];
+  const totalMinutes = ranking.reduce((s, r) => s + (r.minutes || 0), 0);
+  const avg = ranking.length ? Math.round(totalMinutes / ranking.length) : 0;
+  const max = ranking[0]?.minutes || 0;
+  const shifts = ranking.reduce((s, r) => s + (r.shifts || 0), 0);
+
+  $('stats-total').textContent = fmtHours(totalMinutes);
+  $('stats-avg').textContent = fmtHours(avg);
+  $('stats-max').textContent = fmtHours(max);
+  $('stats-shifts').textContent = shifts;
+
+  $('stats-detail-body').innerHTML = ranking.length
+    ? ranking.map((r, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${escapeHtml(r.name)}</td>
+        <td>${escapeHtml(r.role || '—')}</td>
+        <td>${fmtHours(r.minutes)}</td>
+        <td>${r.shifts || 0}</td>
+      </tr>
+    `).join('')
+    : `<tr><td colspan="5" class="empty-state">${t('loading')}</td></tr>`;
+
+  const activeTab = document.querySelector('.chart-tab.active');
+  const type = activeTab?.dataset.chart || 'bar';
+  renderStatsChart(ranking, type);
+}
+
+function renderStatsChart(ranking, type) {
+  if (!window.Chart) return;
+  const canvas = $('stats-chart');
+  if (!canvas) return;
+
+  const labels = ranking.slice(0, 8).map(r => r.name.split(' ')[0]);
+  const values = ranking.slice(0, 8).map(r => Math.round((r.minutes || 0) / 60 * 10) / 10);
+
+  const colors = [
+    '#800020', '#A32638', '#C8102E', '#5C0017',
+    '#B83A4F', '#8C2A3E', '#D1465F', '#6B1F30',
+  ];
+
+  if (state.statsChart) state.statsChart.destroy();
+
+  const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: type === 'doughnut',
+        position: 'bottom',
+        labels: {
+          color: '#A88F94',
+          font: { size: 11, weight: '600' },
+          padding: 12,
+          boxWidth: 12,
+          usePointStyle: true,
+        },
+      },
+      tooltip: {
+        backgroundColor: '#1A0E12',
+        titleColor: '#F5E6E8',
+        bodyColor: '#E8B4B8',
+        borderColor: 'rgba(163,38,56,0.4)',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
+        displayColors: false,
+        callbacks: { label: ctx => ctx.parsed.y + ' jam' },
+      },
+    },
+  };
+
+  let config;
+
+  if (type === 'bar') {
+    config = {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Jam Kerja',
+          data: values,
+          backgroundColor: (ctx) => {
+            const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 280);
+            g.addColorStop(0, '#A32638');
+            g.addColorStop(1, 'rgba(128, 0, 32, 0.4)');
+            return g;
+          },
+          borderRadius: 6,
+          borderSkipped: false,
+        }],
+      },
+      options: {
+        ...commonOptions,
+        scales: {
+          x: {
+            ticks: { color: '#A88F94', font: { size: 11, weight: '600' } },
+            grid: { display: false },
+            border: { display: false },
+          },
+          y: {
+            ticks: { color: '#A88F94', font: { size: 10 } },
+            grid: { color: 'rgba(232,180,184,0.06)' },
+            border: { display: false },
+            beginAtZero: true,
+          },
+        },
+      },
+    };
+  } else if (type === 'doughnut') {
+    config = {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          backgroundColor: colors,
+          borderColor: '#16121A',
+          borderWidth: 3,
+          hoverOffset: 10,
+        }],
+      },
+      options: { ...commonOptions, cutout: '60%' },
+    };
+  } else if (type === 'radar') {
+    config = {
+      type: 'radar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Jam Kerja',
+          data: values,
+          backgroundColor: 'rgba(163, 38, 56, 0.2)',
+          borderColor: '#A32638',
+          borderWidth: 2,
+          pointBackgroundColor: '#A32638',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+        }],
+      },
+      options: {
+        ...commonOptions,
+        plugins: { ...commonOptions.plugins, legend: { display: false } },
+        scales: {
+          r: {
+            angleLines: { color: 'rgba(163,38,56,0.1)' },
+            grid: { color: 'rgba(163,38,56,0.1)' },
+            pointLabels: { color: '#A88F94', font: { size: 10, weight: '600' } },
+            ticks: { color: '#6B5659', backdropColor: 'transparent', font: { size: 9 } },
+          },
+        },
+      },
+    };
+  }
+
+  state.statsChart = new Chart(canvas, config);
+}
+
+// ============================================================
+// REFRESH ALL
+// ============================================================
+async function refreshAll(showNotice = false) {
+  if (!apiReady()) return;
+  try {
+    const [dash, emp, att, tax, leaves] = await Promise.all([
+      jsonp('dashboard').catch(() => ({ ok: true, data: {} })),
+      jsonp('employees').catch(() => ({ ok: true, data: [] })),
+      jsonp('attendance').catch(() => ({ ok: true, data: [] })),
+      jsonp('taxes').catch(() => ({ ok: true, data: [] })),
+      jsonp('leaves').catch(() => ({ ok: true, data: [] })),
+    ]);
+    state.dashboard = dash.data || {};
+    state.employees = emp.data || [];
+    state.attendance = att.data || [];
+    state.taxes = tax.data || [];
+    state.leaves = leaves.data || [];
+
+    renderDashboard();
+    renderAttendance();
+    renderTax();
+    renderRank();
+    renderStats();
+    renderLeaveHistory();
+
+    if (showNotice) notify(t('msgRefreshed'));
+  } catch (err) {
+    notify(err.message, true);
+  }
+}
+
+// ============================================================
+// CLOCK ACTION (tanpa PIN, dengan tanggal)
+// ============================================================
+async function clockAction(action) {
+  const id = $('clock-employee').value;
+  const date = $('clock-date').value;
+  if (!date) { notify(t('errDate'), true); return; }
+  if (!id) { notify(t('errSelect'), true); return; }
+
+  const btn = $(action === 'clockIn' ? 'clock-in-btn' : 'clock-out-btn');
+  setBusy(btn, true);
+  try {
+    await post(action, { employeeId: id, date });
+    await refreshAll();
+    notify(action === 'clockIn' ? t('msgClockIn') : t('msgClockOut'));
+  } catch (err) {
+    notify(err.message, true);
+  } finally {
+    setBusy(btn, false, action === 'clockIn' ? t('btnClockIn') : t('btnClockOut'));
+  }
+}
+
+// ============================================================
+// LEAVE / LIBUR
+// ============================================================
+async function submitLeave() {
+  const employeeId = $('leave-employee').value;
+  const reason = $('leave-reason').value;
+  const dateFrom = $('leave-from').value;
+  const dateTo = $('leave-to').value;
+
+  if (!employeeId) { notify(t('errLeaveEmployee'), true); return; }
+  if (!reason) { notify(t('errLeaveReason'), true); return; }
+  if (!dateFrom || !dateTo) { notify(t('errLeaveDates'), true); return; }
+  if (new Date(dateTo) < new Date(dateFrom)) { notify(t('errLeaveRange'), true); return; }
+
+  const btn = $('leave-submit-btn');
+  setBusy(btn, true);
+
+  try {
+    const emp = state.employees.find(x => x.id === employeeId);
+    await post('submitLeave', {
+      employeeId,
+      employeeName: emp?.name || '',
+      reason,
+      dateFrom,
+      dateTo,
+      lang: state.lang,
+    });
+    await refreshAll();
+
+    $('leave-reason').value = '';
+    $('leave-from').value = '';
+    $('leave-to').value = '';
+    notify(t('msgLeaveSubmitted'));
+  } catch (err) {
+    notify(err.message, true);
+  } finally {
+    setBusy(btn, false, t('btnSubmitLeave'));
+  }
+}
+
+// ============================================================
+// TAX UPLOAD
+// ============================================================
+function setupTaxDropZone() {
+  const drop = $('drop-zone');
+  const input = $('tax-file');
+  const preview = $('tax-preview');
+  if (!drop || !input) return;
+
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => {
+    e.preventDefault();
+    drop.classList.add('over');
+  }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => {
+    e.preventDefault();
+    drop.classList.remove('over');
+  }));
+  drop.addEventListener('drop', e => {
+    const file = e.dataTransfer.files[0];
+    if (file) setTaxFile(file);
+  });
+  input.addEventListener('change', e => {
+    if (e.target.files[0]) setTaxFile(e.target.files[0]);
+  });
+
+  document.addEventListener('paste', e => {
+    if ($('view-tax').classList.contains('hidden')) return;
+    for (const item of e.clipboardData.items) {
+      if (item.type.indexOf('image') !== -1) {
+        setTaxFile(item.getAsFile());
+        break;
+      }
+    }
+  });
+
+  function setTaxFile(file) {
+    if (!file.type.startsWith('image/')) {
+      notify(t('errFile'), true);
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      notify(t('errSize'), true);
+      return;
+    }
+    state.taxFile = file;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      preview.src = ev.target.result;
+      drop.classList.add('has-img');
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+async function uploadTax() {
+  const id = $('tax-employee').value;
+  const amount = $('tax-amount').value;
+  if (!id) { notify(t('errSelect'), true); return; }
+  if (!amount) { notify(t('errAmount'), true); return; }
+  if (!state.taxFile) { notify(t('errPhoto'), true); return; }
+
+  const btn = $('tax-upload-btn');
+  setBusy(btn, true);
+
+  try {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const b64 = e.target.result.split(',')[1];
+      const emp = state.employees.find(x => x.id === id);
+      try {
+        await post('uploadTax', {
+          employeeId: id,
+          employeeName: emp?.name || '',
+          amount: Number(amount),
+          fileBase64: b64,
+          fileName: state.taxFile.name,
+          fileType: state.taxFile.type,
+          lang: state.lang,
+        });
+        await refreshAll();
+        state.taxFile = null;
+        $('tax-amount').value = '';
+        $('tax-preview').style.display = 'none';
+        $('drop-zone').classList.remove('has-img');
+        notify(t('msgUpload'));
+      } catch (err) {
+        notify(err.message, true);
+      } finally {
+        setBusy(btn, false, t('btnUpload'));
+      }
+    };
+    reader.readAsDataURL(state.taxFile);
+  } catch (err) {
+    notify(err.message, true);
+    setBusy(btn, false, t('btnUpload'));
+  }
+}
+
+// ============================================================
+// LOADING ANIMATION
+// ============================================================
+const loadingStages = [
+  { pct: 25, text: 'Menyiapkan sistem...' },
+  { pct: 55, text: 'Memuat data karyawan...' },
+  { pct: 80, text: 'Menghubungkan server...' },
+  { pct: 100, text: 'Siap!' },
+];
+let stageIdx = 0;
+
+function runLoading() {
+  const fill = $('progressFill');
+  const status = $('loadStatus');
+  if (!fill || !status) return;
+
+  if (stageIdx >= loadingStages.length) {
+    setTimeout(() => {
+      const loading = $('loading');
+      const app = $('appShell');
+      if (loading) loading.classList.add('hide');
+      if (app) app.classList.add('show');
+      setTimeout(() => loading?.remove(), 700);
+    }, 400);
+    return;
+  }
+  const s = loadingStages[stageIdx];
+  fill.style.width = s.pct + '%';
+  status.textContent = s.text;
+  stageIdx++;
+  setTimeout(runLoading, stageIdx === loadingStages.length ? 500 : 450);
+}
+
+// ============================================================
+// CLOCK
+// ============================================================
+function tickClock() {
+  const now = new Date();
+  const date = $('current-date');
+  const time = $('current-time');
+  if (date) date.textContent = now.toLocaleDateString('id-ID', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
+  if (time) time.textContent = now.toLocaleTimeString('id-ID', { hour12: false });
+}
+
+// ============================================================
+// EVENT BINDING
+// ============================================================
+function bindEvents() {
+  const nav = $('navigation');
+  if (nav) {
+    nav.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-view]');
+      if (btn) switchView(btn.dataset.view);
+    });
+  }
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-goto]');
+    if (btn) switchView(btn.dataset.goto);
+  });
+
+  $('refresh-btn')?.addEventListener('click', () => refreshAll(true));
+  $('clock-in-btn')?.addEventListener('click', () => clockAction('clockIn'));
+  $('clock-out-btn')?.addEventListener('click', () => clockAction('clockOut'));
+  $('leave-submit-btn')?.addEventListener('click', submitLeave);
+  $('tax-upload-btn')?.addEventListener('click', uploadTax);
+
+  document.querySelectorAll('.chart-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderStats();
+    });
+  });
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  bindEvents();
+  setupTaxDropZone();
+  setLang('id');
+  setDefaultDate();
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  setInterval(() => {
+    if (state.attendance.length) {
+      renderDashboard();
+      renderAttendance();
+    }
+  }, 30000);
+
+  setInterval(() => {
+    if (apiReady()) refreshAll();
+  }, 60000);
+
+  window.addEventListener('load', () => setTimeout(runLoading, 300));
+  refreshAll();
+}
+
+init();
+</script>
+</body>
+</html>
