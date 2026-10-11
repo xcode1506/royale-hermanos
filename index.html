@@ -1281,7 +1281,7 @@ footer span:last-child { color: var(--burgundy-bright); }
           <h2 data-i18n="welcomeTitle">Selamat bertugas, Manager.</h2>
           <p data-i18n="welcomeDesc">Pantau aktivitas tim Royale Hermanos Bar Saloon dalam satu tempat.</p>
         </div>
-        <span class="date-pill" id="week-label" data-i18n="thisWeek">Minggu berjalan</span>
+        <span class="date-pill" id="month-label" data-i18n="thisWeek">Minggu berjalan</span>
       </div>
 
       <div class="stats-grid">
@@ -1301,9 +1301,9 @@ footer span:last-child { color: var(--burgundy-bright); }
           <small data-i18n="offDutyDesc">Sudah clock out</small>
         </article>
         <article class="stat-card">
-          <span data-i18n="weeklyHours">Jam Kerja Minggu Ini</span>
+          <span data-i18n="monthlyHours">Jam Kerja Minggu Ini</span>
           <strong id="stat-hours">—</strong>
-          <small data-i18n="weeklyHoursDesc">Total durasi terselesaikan</small>
+          <small data-i18n="monthlyHoursDesc">Total durasi terselesaikan</small>
         </article>
       </div>
 
@@ -1311,19 +1311,19 @@ footer span:last-child { color: var(--burgundy-bright); }
         <article class="panel chart-panel">
           <div class="panel-heading">
             <div>
-              <h3 data-i18n="weeklyChartTitle">Jam Kerja Mingguan</h3>
-              <p data-i18n="weeklyChartDesc">Total jam per hari, minggu ini</p>
+              <h3 data-i18n="monthlyChartTitle">Jam Kerja Mingguan</h3>
+              <p data-i18n="monthlyChartDesc">Total jam per hari, bulan ini</p>
             </div>
             <span class="mini-tag">WEEKLY</span>
           </div>
-          <div class="chart-wrap"><canvas id="weekly-chart"></canvas></div>
+          <div class="chart-wrap"><canvas id="monthly-chart"></canvas></div>
         </article>
 
         <article class="panel">
           <div class="panel-heading">
             <div>
               <h3 data-i18n="topWorkersTitle">Pekerja Terbaik</h3>
-              <p data-i18n="topWorkersDesc">Peringkat jam kerja minggu ini</p>
+              <p data-i18n="topWorkersDesc">Peringkat jam kerja bulan ini</p>
             </div>
             <span class="trophy">♛</span>
           </div>
@@ -1493,7 +1493,7 @@ footer span:last-child { color: var(--burgundy-bright); }
         <div class="panel-heading">
           <div>
             <h3 data-i18n="leaveHistoryTitle">Riwayat Libur</h3>
-            <p data-i18n="leaveHistoryDesc">Pengajuan cuti minggu ini.</p>
+            <p data-i18n="leaveHistoryDesc">Pengajuan cuti bulan ini.</p>
           </div>
         </div>
         <div id="leave-history" class="active-shifts">
@@ -1550,7 +1550,7 @@ footer span:last-child { color: var(--burgundy-bright); }
           <div class="panel-heading">
             <div>
               <h3 data-i18n="taxHistoryTitle">Riwayat Cukai</h3>
-              <p data-i18n="taxHistoryDesc">Cukai minggu ini.</p>
+              <p data-i18n="taxHistoryDesc">Cukai bulan ini.</p>
             </div>
           </div>
           <div id="tax-history" class="active-shifts">
@@ -1565,9 +1565,9 @@ footer span:last-child { color: var(--burgundy-bright); }
       <div class="welcome-row">
         <div>
           <h2 data-i18n="rankTitle">Peringkat Pekerja</h2>
-          <p data-i18n="rankDesc">Diurutkan berdasarkan total jam kerja minggu ini.</p>
+          <p data-i18n="rankDesc">Diurutkan berdasarkan total jam kerja bulan ini.</p>
         </div>
-        <span class="date-pill" id="rank-week-label" data-i18n="thisWeek">Minggu berjalan</span>
+        <span class="date-pill" id="rank-month-label" data-i18n="thisWeek">Minggu berjalan</span>
       </div>
 
       <article class="panel">
@@ -1633,7 +1633,7 @@ footer span:last-child { color: var(--burgundy-bright); }
         <div class="panel-heading">
           <div>
             <h3 data-i18n="detailsTitle">Detail Per Karyawan</h3>
-            <p data-i18n="detailsDesc">Total jam kerja minggu ini.</p>
+            <p data-i18n="detailsDesc">Total jam kerja bulan ini.</p>
           </div>
         </div>
         <div class="table-scroll">
@@ -1703,9 +1703,9 @@ const T = {
     totalEmployees:'Total Karyawan', totalEmployeesDesc:'Aktif terdaftar',
     onDuty:'On Duty', onDutyDesc:'Sedang bekerja',
     offDuty:'Off Duty', offDutyDesc:'Sudah clock out',
-    weeklyHours:'Jam Kerja Minggu Ini', weeklyHoursDesc:'Total durasi terselesaikan',
-    weeklyChartTitle:'Jam Kerja Mingguan', weeklyChartDesc:'Total jam per hari, minggu ini',
-    topWorkersTitle:'Pekerja Terbaik', topWorkersDesc:'Peringkat jam kerja minggu ini',
+    monthlyHours:'Jam Kerja Minggu Ini', monthlyHoursDesc:'Total durasi terselesaikan',
+    monthlyChartTitle:'Jam Kerja Mingguan', monthlyChartDesc:'Total jam per hari, bulan ini',
+    topWorkersTitle:'Pekerja Terbaik', topWorkersDesc:'Peringkat jam kerja bulan ini',
     liveAttendanceTitle:'Absensi Langsung', liveAttendanceDesc:'Status shift karyawan',
     seeAttendance:'Lihat absensi →',
     thEmployee:'Karyawan', thRole:'Jabatan', thClockIn:'Clock In',
@@ -1740,7 +1740,7 @@ const T = {
     btnSubmitLeave:'Ajukan Libur',
     leaveHint:'Pengajuan akan dikirim ke manajer melalui Discord.',
     leaveHistoryTitle:'Riwayat Libur',
-    leaveHistoryDesc:'Pengajuan cuti minggu ini.',
+    leaveHistoryDesc:'Pengajuan cuti bulan ini.',
     noLeaveHistory:'Belum ada pengajuan libur.',
     // Cukai
     taxTitle:'Pembayaran Cukai',
@@ -1754,11 +1754,11 @@ const T = {
     dropHint:'Ctrl+V untuk paste · Drag file ke sini · Klik untuk pilih',
     btnUpload:'Kirim Bukti Cukai',
     taxHint:'Maks 5MB per foto. Format JPG, PNG, atau WEBP.',
-    taxHistoryTitle:'Riwayat Cukai', taxHistoryDesc:'Cukai minggu ini.',
+    taxHistoryTitle:'Riwayat Cukai', taxHistoryDesc:'Cukai bulan ini.',
     noTaxHistory:'Belum ada pembayaran cukai.',
     // Rank
     rankTitle:'Peringkat Pekerja',
-    rankDesc:'Diurutkan berdasarkan total jam kerja minggu ini.',
+    rankDesc:'Diurutkan berdasarkan total jam kerja bulan ini.',
     rankListTitle:'Top Pekerja Minggu Ini',
     rankListDesc:'Peringkat 1-3 dapat bonus dari boss.',
     // Stats
@@ -1767,7 +1767,7 @@ const T = {
     statsMax:'Jam Tertinggi', statsShifts:'Total Shift',
     chartTitle:'Visualisasi Jam Kerja', chartDesc:'Pilih tampilan chart yang diinginkan.',
     chartBar:'Bar', chartDoughnut:'Donut', chartRadar:'Radar',
-    detailsTitle:'Detail Per Karyawan', detailsDesc:'Total jam kerja minggu ini.',
+    detailsTitle:'Detail Per Karyawan', detailsDesc:'Total jam kerja bulan ini.',
     // Errors
     errSelect:'Pilih karyawan dulu.',
     errDate:'Pilih tanggal dulu.',
@@ -1795,13 +1795,13 @@ const T = {
     systemReady:'SYSTEM READY',
     welcomeTitle:'Good shift, Manager.',
     welcomeDesc:'Monitor Royale Hermanos Bar Saloon team activity in one place.',
-    thisWeek:'Current week',
+    thisWeek:'Current month',
     totalEmployees:'Total Employees', totalEmployeesDesc:'Active registered',
     onDuty:'On Duty', onDutyDesc:'Currently working',
     offDuty:'Off Duty', offDutyDesc:'Clocked out',
-    weeklyHours:'Weekly Work Hours', weeklyHoursDesc:'Total completed duration',
-    weeklyChartTitle:'Weekly Work Hours', weeklyChartDesc:'Total hours per day, this week',
-    topWorkersTitle:'Top Workers', topWorkersDesc:'Work hours ranking this week',
+    monthlyHours:'Weekly Work Hours', monthlyHoursDesc:'Total completed duration',
+    monthlyChartTitle:'Weekly Work Hours', monthlyChartDesc:'Total hours per day, this month',
+    topWorkersTitle:'Top Workers', topWorkersDesc:'Work hours ranking this month',
     liveAttendanceTitle:'Live Attendance', liveAttendanceDesc:'Employee shift status',
     seeAttendance:'See attendance →',
     thEmployee:'Employee', thRole:'Role', thClockIn:'Clock In',
@@ -1836,7 +1836,7 @@ const T = {
     btnSubmitLeave:'Submit Leave',
     leaveHint:'Request will be sent to manager via Discord.',
     leaveHistoryTitle:'Leave History',
-    leaveHistoryDesc:'This week leave requests.',
+    leaveHistoryDesc:'This month leave requests.',
     noLeaveHistory:'No leave request yet.',
     // Tax
     taxTitle:'Tax Payment',
@@ -1850,12 +1850,12 @@ const T = {
     dropHint:'Ctrl+V to paste · Drag file here · Click to select',
     btnUpload:'Send Tax Proof',
     taxHint:'Max 5MB per photo. JPG, PNG, or WEBP format.',
-    taxHistoryTitle:'Tax History', taxHistoryDesc:'This week payments.',
+    taxHistoryTitle:'Tax History', taxHistoryDesc:'This month payments.',
     noTaxHistory:'No tax payment yet.',
     // Rank
     rankTitle:'Employee Ranking',
-    rankDesc:'Sorted by total work hours this week.',
-    rankListTitle:'Top Workers This Week',
+    rankDesc:'Sorted by total work hours this month.',
+    rankListTitle:'Top Workers This Month',
     rankListDesc:'Rank 1-3 get bonus from boss.',
     // Stats
     statsTitle:'Statistics', statsDesc:'Work hours and team performance visualization.',
@@ -1863,7 +1863,7 @@ const T = {
     statsMax:'Highest Hours', statsShifts:'Total Shifts',
     chartTitle:'Work Hours Visualization', chartDesc:'Choose chart display.',
     chartBar:'Bar', chartDoughnut:'Donut', chartRadar:'Radar',
-    detailsTitle:'Details Per Employee', detailsDesc:'Total work hours this week.',
+    detailsTitle:'Details Per Employee', detailsDesc:'Total work hours this month.',
     // Errors
     errSelect:'Select employee first.',
     errDate:'Select date first.',
@@ -1895,9 +1895,9 @@ const T = {
     totalEmployees:'Jumlah Pekerja', totalEmployeesDesc:'Aktif berdaftar',
     onDuty:'On Duty', onDutyDesc:'Sedang bekerja',
     offDuty:'Off Duty', offDutyDesc:'Sudah clock out',
-    weeklyHours:'Jam Kerja Minggu Ini', weeklyHoursDesc:'Jumlah durasi selesai',
-    weeklyChartTitle:'Jam Kerja Mingguan', weeklyChartDesc:'Jumlah jam sehari, minggu ini',
-    topWorkersTitle:'Pekerja Terbaik', topWorkersDesc:'Kedudukan jam kerja minggu ini',
+    monthlyHours:'Jam Kerja Minggu Ini', monthlyHoursDesc:'Jumlah durasi selesai',
+    monthlyChartTitle:'Jam Kerja Mingguan', monthlyChartDesc:'Jumlah jam sehari, bulan ini',
+    topWorkersTitle:'Pekerja Terbaik', topWorkersDesc:'Kedudukan jam kerja bulan ini',
     liveAttendanceTitle:'Kehadiran Langsung', liveAttendanceDesc:'Status syif pekerja',
     seeAttendance:'Lihat kehadiran →',
     thEmployee:'Pekerja', thRole:'Jawatan', thClockIn:'Clock In',
@@ -1932,7 +1932,7 @@ const T = {
     btnSubmitLeave:'Hantar Cuti',
     leaveHint:'Permohonan akan dihantar kepada pengurus melalui Discord.',
     leaveHistoryTitle:'Sejarah Cuti',
-    leaveHistoryDesc:'Permohonan cuti minggu ini.',
+    leaveHistoryDesc:'Permohonan cuti bulan ini.',
     noLeaveHistory:'Tiada permohonan cuti lagi.',
     // Tax
     taxTitle:'Pembayaran Cukai',
@@ -1946,11 +1946,11 @@ const T = {
     dropHint:'Ctrl+V untuk tampal · Drag fail ke sini · Klik untuk pilih',
     btnUpload:'Hantar Bukti Cukai',
     taxHint:'Maks 5MB setiap foto. Format JPG, PNG, atau WEBP.',
-    taxHistoryTitle:'Sejarah Cukai', taxHistoryDesc:'Cukai minggu ini.',
+    taxHistoryTitle:'Sejarah Cukai', taxHistoryDesc:'Cukai bulan ini.',
     noTaxHistory:'Tiada bayaran cukai lagi.',
     // Rank
     rankTitle:'Kedudukan Pekerja',
-    rankDesc:'Disusun ikut jumlah jam kerja minggu ini.',
+    rankDesc:'Disusun ikut jumlah jam kerja bulan ini.',
     rankListTitle:'Pekerja Terbaik Minggu Ini',
     rankListDesc:'Kedudukan 1-3 dapat bonus dari boss.',
     // Stats
@@ -1959,7 +1959,7 @@ const T = {
     statsMax:'Jam Tertinggi', statsShifts:'Jumlah Syif',
     chartTitle:'Visualisasi Jam Kerja', chartDesc:'Pilih paparan carta.',
     chartBar:'Bar', chartDoughnut:'Donut', chartRadar:'Radar',
-    detailsTitle:'Butiran Setiap Pekerja', detailsDesc:'Jumlah jam kerja minggu ini.',
+    detailsTitle:'Butiran Setiap Pekerja', detailsDesc:'Jumlah jam kerja bulan ini.',
     // Errors
     errSelect:'Pilih pekerja dulu.',
     errDate:'Pilih tarikh dulu.',
@@ -2138,8 +2138,8 @@ function renderDashboard() {
   $('stat-employees').textContent = totalCount;
   $('stat-on-duty').textContent = onCount;
   $('stat-off-duty').textContent = Math.max(0, totalCount - onCount);
-  $('stat-hours').textContent = fmtHours(d.weeklyMinutes ?? 0);
-  if (d.weekLabel) $('week-label').textContent = d.weekLabel;
+  $('stat-hours').textContent = fmtHours(d.monthlyMinutes ?? 0);
+  if (d.monthLabel) $('month-label').textContent = d.monthLabel;
 
   $('live-attendance-body').innerHTML = active.length
     ? active.map(a => `
@@ -2178,7 +2178,7 @@ function renderWeeklyChart(daily) {
     return found ? Math.round(found.minutes / 60 * 10) / 10 : 0;
   });
   if (state.chart) state.chart.destroy();
-  const canvas = $('weekly-chart');
+  const canvas = $('monthly-chart');
   if (!canvas) return;
   state.chart = new Chart(canvas, {
     type: 'bar',
@@ -2764,7 +2764,7 @@ function tickClock() {
   const now = new Date();
   const date = $('current-date');
   const time = $('current-time');
-  if (date) date.textContent = now.toLocaleDateString('id-ID', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
+  if (date) date.textContent = now.toLocaleDateString('id-ID', { monthday:'short', day:'2-digit', month:'short', year:'numeric' });
   if (time) time.textContent = now.toLocaleTimeString('id-ID', { hour12: false });
 }
 
