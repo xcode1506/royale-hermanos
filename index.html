@@ -5,10 +5,33 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0A0A0A">
 <title>Royale Hermanos Management System</title>
+
+<!-- ============================================================
+     FAVICON & PWA ICONS
+     ============================================================ -->
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="512x512" href="logo.png">
+<link rel="apple-touch-icon" sizes="192x192" href="logo-192.png">
+<link rel="manifest" href="manifest.json">
+
+<!-- ============================================================
+     OPEN GRAPH — Untuk share WhatsApp/Sosial Media
+     ============================================================ -->
+<meta property="og:title" content="Royale Hermanos Management System">
+<meta property="og:description" content="Sistem absensi, cukai, dan ranking untuk Bar Saloon Royale Hermanos">
+<meta property="og:image" content="logo.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="logo.png">
+
+<!-- ============================================================
+     FONTS & LIBRARIES
+     ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 /* ============================================================
    ROYALE HERMANOS — BURGUNDY & BLACK
@@ -36,6 +59,8 @@
   --green-bright: #22C55E;
   --red: #DC2626;
   --amber: #D97706;
+  --gold: #D4AF37;
+  --gold-bright: #E8C766;
 
   --radius: 14px;
   --radius-sm: 10px;
@@ -119,39 +144,28 @@ button { cursor: pointer; }
   width: 100%;
 }
 
-.load-logo {
-  width: 76px; height: 76px;
-  margin: 0 auto 26px;
-  border-radius: 16px;
-  background: linear-gradient(155deg, #1A0E12 0%, #0A0A0A 100%);
-  border: 1px solid rgba(163, 38, 56, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 28px;
-  font-weight: 800;
-  color: #E8B4B8;
-  letter-spacing: -0.5px;
-  box-shadow: 0 20px 60px rgba(128, 0, 32, 0.3);
-  animation: logoIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  position: relative;
+/* ============================================================
+   LOGO DI LOADING PAGE
+   ============================================================ */
+.load-logo-img {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 24px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 40px rgba(212, 175, 55, 0.3));
+  animation: logoIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
-.load-logo::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 17px;
-  background: linear-gradient(135deg, rgba(200,16,46,0.6), transparent 40%, transparent 60%, rgba(200,16,46,0.3));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  padding: 1px;
-  pointer-events: none;
-}
+
 @keyframes logoIn {
-  from { opacity: 0; transform: scale(0.9) translateY(8px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .load-title {
@@ -258,21 +272,18 @@ button { cursor: pointer; }
   padding-bottom: 20px;
   border-bottom: 1px solid var(--line-soft);
 }
-.brand-mark {
-  width: 44px; height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 11px;
-  background: linear-gradient(145deg, #2A1F26, #0F0A0D);
-  border: 1px solid rgba(163, 38, 56, 0.5);
-  color: #E8B4B8;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800;
-  font-size: 17px;
-  letter-spacing: -0.5px;
-  box-shadow: inset 0 0 18px rgba(163, 38, 56, 0.15);
+
+/* ============================================================
+   LOGO DI SIDEBAR
+   ============================================================ */
+.brand-logo-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
   flex-shrink: 0;
+  filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.35));
 }
+
 .brand-copy {
   display: flex;
   flex-direction: column;
@@ -889,7 +900,6 @@ input::placeholder { color: var(--dim); }
   margin-top: 12px;
 }
 
-/* Date row untuk form libur */
 .date-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1108,6 +1118,7 @@ footer span:last-child { color: var(--burgundy-bright); }
   .sidebar { padding: 20px 10px; align-items: center; }
   .brand-copy { display: none; }
   .brand { justify-content: center; }
+  .brand-logo-img { width: 38px; height: 38px; }
   .nav-item { justify-content: center; padding: 12px 6px; }
   .nav-label { display: none; }
   .nav-ico { font-size: 19px; }
@@ -1179,6 +1190,12 @@ footer span:last-child { color: var(--burgundy-bright); }
   .clock-actions { flex-direction: column; }
   .date-row { grid-template-columns: 1fr; }
 
+  /* Logo lebih kecil di HP */
+  .load-logo-img {
+    width: 110px;
+    height: 110px;
+  }
+
   footer {
     font-size: 8px;
     flex-direction: column;
@@ -1196,7 +1213,7 @@ footer span:last-child { color: var(--burgundy-bright); }
 <div id="loading">
   <div class="grid-pattern"></div>
   <div class="load-inner">
-    <div class="load-logo">RH</div>
+    <img src="logo.png" alt="Royale Hermanos" class="load-logo-img">
     <h1 class="load-title">Royale Hermanos<br>Management System</h1>
     <div class="load-sub">Bar Saloon · Team · Excellence</div>
     <div class="load-progress"><div class="load-progress-fill" id="progressFill"></div></div>
@@ -1213,7 +1230,7 @@ footer span:last-child { color: var(--burgundy-bright); }
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-mark">RH</div>
+      <img src="logo.png" alt="Royale Hermanos" class="brand-logo-img">
       <div class="brand-copy">
         <strong>ROYALE HERMANOS</strong>
         <span>MANAGEMENT SYSTEM</span>
@@ -1281,7 +1298,7 @@ footer span:last-child { color: var(--burgundy-bright); }
           <h2 data-i18n="welcomeTitle">Selamat bertugas, Manager.</h2>
           <p data-i18n="welcomeDesc">Pantau aktivitas tim Royale Hermanos Bar Saloon dalam satu tempat.</p>
         </div>
-        <span class="date-pill" id="month-label" data-i18n="thisWeek">Minggu berjalan</span>
+        <span class="date-pill" id="week-label" data-i18n="thisMonth">Bulan berjalan</span>
       </div>
 
       <div class="stats-grid">
@@ -1301,7 +1318,7 @@ footer span:last-child { color: var(--burgundy-bright); }
           <small data-i18n="offDutyDesc">Sudah clock out</small>
         </article>
         <article class="stat-card">
-          <span data-i18n="monthlyHours">Jam Kerja Minggu Ini</span>
+          <span data-i18n="monthlyHours">Jam Kerja Bulan Ini</span>
           <strong id="stat-hours">—</strong>
           <small data-i18n="monthlyHoursDesc">Total durasi terselesaikan</small>
         </article>
@@ -1311,12 +1328,12 @@ footer span:last-child { color: var(--burgundy-bright); }
         <article class="panel chart-panel">
           <div class="panel-heading">
             <div>
-              <h3 data-i18n="monthlyChartTitle">Jam Kerja Mingguan</h3>
+              <h3 data-i18n="monthlyChartTitle">Jam Kerja Bulanan</h3>
               <p data-i18n="monthlyChartDesc">Total jam per hari, bulan ini</p>
             </div>
-            <span class="mini-tag">WEEKLY</span>
+            <span class="mini-tag">MONTHLY</span>
           </div>
-          <div class="chart-wrap"><canvas id="monthly-chart"></canvas></div>
+          <div class="chart-wrap"><canvas id="weekly-chart"></canvas></div>
         </article>
 
         <article class="panel">
@@ -1337,7 +1354,7 @@ footer span:last-child { color: var(--burgundy-bright); }
         <div class="panel-heading">
           <div>
             <h3 data-i18n="liveAttendanceTitle">Absensi Langsung</h3>
-            <p data-i18n="liveAttendanceDesc">Status shift karyawan</p>
+            <p data-i18n="liveAttendanceDesc">Status shift karyawan saat ini</p>
           </div>
           <button class="text-button" data-goto="attendance">
             <span data-i18n="seeAttendance">Lihat absensi →</span>
@@ -1550,7 +1567,7 @@ footer span:last-child { color: var(--burgundy-bright); }
           <div class="panel-heading">
             <div>
               <h3 data-i18n="taxHistoryTitle">Riwayat Cukai</h3>
-              <p data-i18n="taxHistoryDesc">Cukai minggu ini.</p>
+              <p data-i18n="taxHistoryDesc">Cukai bulan ini.</p>
             </div>
           </div>
           <div id="tax-history" class="active-shifts">
@@ -1567,7 +1584,7 @@ footer span:last-child { color: var(--burgundy-bright); }
           <h2 data-i18n="rankTitle">Peringkat Pekerja</h2>
           <p data-i18n="rankDesc">Diurutkan berdasarkan total jam kerja bulan ini.</p>
         </div>
-        <span class="date-pill" id="rank-month-label" data-i18n="thisWeek">Minggu berjalan</span>
+        <span class="date-pill" id="rank-week-label" data-i18n="thisMonth">Bulan berjalan</span>
       </div>
 
       <article class="panel">
@@ -1663,7 +1680,7 @@ footer span:last-child { color: var(--burgundy-bright); }
 <script>
 /* ============================================================
    ROYALE HERMANOS MANAGEMENT SYSTEM
-   Bar Saloon Edition
+   Bar Saloon Edition — Monthly Ranking
    ============================================================ */
 
 // ============================================================
@@ -1697,16 +1714,16 @@ const T = {
     navRank:'Rank', navStats:'Statistik',
     eyebrow:'OPERASIONAL BAR SALOON / KONTROL STAF',
     systemReady:'SISTEM SIAP',
-    welcomeTitle:'Selamat bertugas, Bartender.',
+    welcomeTitle:'Selamat bertugas, Manager.',
     welcomeDesc:'Pantau aktivitas tim Royale Hermanos Bar Saloon dalam satu tempat.',
-    thisWeek:'Minggu berjalan',
+    thisMonth:'Bulan berjalan',
     totalEmployees:'Total Karyawan', totalEmployeesDesc:'Aktif terdaftar',
     onDuty:'On Duty', onDutyDesc:'Sedang bekerja',
     offDuty:'Off Duty', offDutyDesc:'Sudah clock out',
-    monthlyHours:'Jam Kerja Minggu Ini', monthlyHoursDesc:'Total durasi terselesaikan',
-    monthlyChartTitle:'Jam Kerja Mingguan', monthlyChartDesc:'Total jam per hari, bulan ini',
+    monthlyHours:'Jam Kerja Bulan Ini', monthlyHoursDesc:'Total durasi terselesaikan bulan ini',
+    monthlyChartTitle:'Jam Kerja Bulanan', monthlyChartDesc:'Total jam per hari, bulan ini',
     topWorkersTitle:'Pekerja Terbaik', topWorkersDesc:'Peringkat jam kerja bulan ini',
-    liveAttendanceTitle:'Absensi Langsung', liveAttendanceDesc:'Status shift karyawan',
+    liveAttendanceTitle:'Absensi Langsung', liveAttendanceDesc:'Status shift karyawan saat ini',
     seeAttendance:'Lihat absensi →',
     thEmployee:'Karyawan', thRole:'Jabatan', thClockIn:'Clock In',
     thClockOut:'Clock Out', thDuration:'Durasi', thStatus:'Status',
@@ -1725,7 +1742,6 @@ const T = {
     activeShiftsDesc:'Durasi diperbarui otomatis.',
     noActiveShift:'Tidak ada shift aktif.',
     historyTitle:'Riwayat Absensi', historyDesc:'Catatan shift terbaru.',
-    // Libur
     leaveTitle:'Form Libur / Cuti',
     leaveDesc:'Ajukan izin libur dan rekap otomatis.',
     formReason:'Alasan cuti',
@@ -1742,7 +1758,6 @@ const T = {
     leaveHistoryTitle:'Riwayat Libur',
     leaveHistoryDesc:'Pengajuan cuti bulan ini.',
     noLeaveHistory:'Belum ada pengajuan libur.',
-    // Cukai
     taxTitle:'Pembayaran Cukai',
     taxDesc:'Upload bukti bayar cukai langsung ke Discord.',
     uploadTaxTitle:'Upload Bukti Cukai',
@@ -1756,19 +1771,16 @@ const T = {
     taxHint:'Maks 5MB per foto. Format JPG, PNG, atau WEBP.',
     taxHistoryTitle:'Riwayat Cukai', taxHistoryDesc:'Cukai bulan ini.',
     noTaxHistory:'Belum ada pembayaran cukai.',
-    // Rank
     rankTitle:'Peringkat Pekerja',
     rankDesc:'Diurutkan berdasarkan total jam kerja bulan ini.',
     rankListTitle:'Top Pekerja Bulan Ini',
     rankListDesc:'Peringkat 1-3 dapat bonus dari boss.',
-    // Stats
     statsTitle:'Statistik', statsDesc:'Visualisasi jam kerja dan performa tim.',
     statsTotal:'Total Jam', statsAvg:'Rata-rata / Karyawan',
     statsMax:'Jam Tertinggi', statsShifts:'Total Shift',
     chartTitle:'Visualisasi Jam Kerja', chartDesc:'Pilih tampilan chart yang diinginkan.',
     chartBar:'Bar', chartDoughnut:'Donut', chartRadar:'Radar',
     detailsTitle:'Detail Per Karyawan', detailsDesc:'Total jam kerja bulan ini.',
-    // Errors
     errSelect:'Pilih karyawan dulu.',
     errDate:'Pilih tanggal dulu.',
     errPhoto:'Upload foto bukti dulu.',
@@ -1780,7 +1792,6 @@ const T = {
     errLeaveReason:'Pilih alasan cuti.',
     errLeaveDates:'Isi tanggal mulai dan tanggal selesai.',
     errLeaveRange:'Tanggal selesai harus setelah tanggal mulai.',
-    // Messages
     loadingData:'Memuat data…',
     msgClockIn:'Clock in tercatat. Selamat bekerja!',
     msgClockOut:'Clock out tercatat. Shift selesai.',
@@ -1793,16 +1804,16 @@ const T = {
     navRank:'Rank', navStats:'Stats',
     eyebrow:'BAR SALOON OPERATIONS / STAFF CONTROL',
     systemReady:'SYSTEM READY',
-    welcomeTitle:'Good shift, Barttender.',
+    welcomeTitle:'Good shift, Manager.',
     welcomeDesc:'Monitor Royale Hermanos Bar Saloon team activity in one place.',
-    thisWeek:'Current month',
+    thisMonth:'Current month',
     totalEmployees:'Total Employees', totalEmployeesDesc:'Active registered',
     onDuty:'On Duty', onDutyDesc:'Currently working',
     offDuty:'Off Duty', offDutyDesc:'Clocked out',
-    monthlyHours:'Weekly Work Hours', monthlyHoursDesc:'Total completed duration',
-    monthlyChartTitle:'Weekly Work Hours', monthlyChartDesc:'Total hours per day, this month',
+    monthlyHours:'Monthly Work Hours', monthlyHoursDesc:'Total duration this month',
+    monthlyChartTitle:'Monthly Work Hours', monthlyChartDesc:'Total hours per day, this month',
     topWorkersTitle:'Top Workers', topWorkersDesc:'Work hours ranking this month',
-    liveAttendanceTitle:'Live Attendance', liveAttendanceDesc:'Employee shift status',
+    liveAttendanceTitle:'Live Attendance', liveAttendanceDesc:'Current employee shift status',
     seeAttendance:'See attendance →',
     thEmployee:'Employee', thRole:'Role', thClockIn:'Clock In',
     thClockOut:'Clock Out', thDuration:'Duration', thStatus:'Status',
@@ -1821,7 +1832,6 @@ const T = {
     activeShiftsDesc:'Duration updated automatically.',
     noActiveShift:'No active shift.',
     historyTitle:'Attendance History', historyDesc:'Recent shift records.',
-    // Leave
     leaveTitle:'Leave / Time-Off Form',
     leaveDesc:'Submit leave request for manager approval.',
     formReason:'Leave reason',
@@ -1838,7 +1848,6 @@ const T = {
     leaveHistoryTitle:'Leave History',
     leaveHistoryDesc:'This month leave requests.',
     noLeaveHistory:'No leave request yet.',
-    // Tax
     taxTitle:'Tax Payment',
     taxDesc:'Upload tax payment proof directly to Discord.',
     uploadTaxTitle:'Upload Tax Proof',
@@ -1852,19 +1861,16 @@ const T = {
     taxHint:'Max 5MB per photo. JPG, PNG, or WEBP format.',
     taxHistoryTitle:'Tax History', taxHistoryDesc:'This month payments.',
     noTaxHistory:'No tax payment yet.',
-    // Rank
     rankTitle:'Employee Ranking',
     rankDesc:'Sorted by total work hours this month.',
     rankListTitle:'Top Workers This Month',
     rankListDesc:'Rank 1-3 get bonus from boss.',
-    // Stats
     statsTitle:'Statistics', statsDesc:'Work hours and team performance visualization.',
     statsTotal:'Total Hours', statsAvg:'Average / Employee',
     statsMax:'Highest Hours', statsShifts:'Total Shifts',
     chartTitle:'Work Hours Visualization', chartDesc:'Choose chart display.',
     chartBar:'Bar', chartDoughnut:'Donut', chartRadar:'Radar',
     detailsTitle:'Details Per Employee', detailsDesc:'Total work hours this month.',
-    // Errors
     errSelect:'Select employee first.',
     errDate:'Select date first.',
     errPhoto:'Upload proof photo first.',
@@ -1876,7 +1882,6 @@ const T = {
     errLeaveReason:'Select leave reason.',
     errLeaveDates:'Fill both start and end date.',
     errLeaveRange:'End date must be after start date.',
-    // Messages
     loadingData:'Loading data…',
     msgClockIn:'Clock in recorded. Have a good shift!',
     msgClockOut:'Clock out recorded. Shift ended.',
@@ -1889,16 +1894,16 @@ const T = {
     navRank:'Rank', navStats:'Statistik',
     eyebrow:'OPERASI BAR SALOON / KAWALAN STAF',
     systemReady:'SISTEM SEDIA',
-    welcomeTitle:'Selamat bertugas, Bartender.',
+    welcomeTitle:'Selamat bertugas, Manager.',
     welcomeDesc:'Pantau aktiviti pasukan Royale Hermanos Bar Saloon di satu tempat.',
-    thisWeek:'Minggu semasa',
+    thisMonth:'Bulan semasa',
     totalEmployees:'Jumlah Pekerja', totalEmployeesDesc:'Aktif berdaftar',
     onDuty:'On Duty', onDutyDesc:'Sedang bekerja',
     offDuty:'Off Duty', offDutyDesc:'Sudah clock out',
-    monthlyHours:'Jam Kerja Minggu Ini', monthlyHoursDesc:'Jumlah durasi selesai',
-    monthlyChartTitle:'Jam Kerja Mingguan', monthlyChartDesc:'Jumlah jam sehari, bulan ini',
+    monthlyHours:'Jam Kerja Bulan Ini', monthlyHoursDesc:'Jumlah durasi selesai bulan ini',
+    monthlyChartTitle:'Jam Kerja Bulanan', monthlyChartDesc:'Jumlah jam sehari, bulan ini',
     topWorkersTitle:'Pekerja Terbaik', topWorkersDesc:'Kedudukan jam kerja bulan ini',
-    liveAttendanceTitle:'Kehadiran Langsung', liveAttendanceDesc:'Status syif pekerja',
+    liveAttendanceTitle:'Kehadiran Langsung', liveAttendanceDesc:'Status syif pekerja semasa',
     seeAttendance:'Lihat kehadiran →',
     thEmployee:'Pekerja', thRole:'Jawatan', thClockIn:'Clock In',
     thClockOut:'Clock Out', thDuration:'Tempoh', thStatus:'Status',
@@ -1917,7 +1922,6 @@ const T = {
     activeShiftsDesc:'Tempoh dikemas kini automatik.',
     noActiveShift:'Tiada syif aktif.',
     historyTitle:'Sejarah Kehadiran', historyDesc:'Rekod syif terkini.',
-    // Leave
     leaveTitle:'Borang Cuti / Rehat',
     leaveDesc:'Hantar permohonan cuti untuk kelulusan pengurus.',
     formReason:'Sebab cuti',
@@ -1934,7 +1938,6 @@ const T = {
     leaveHistoryTitle:'Sejarah Cuti',
     leaveHistoryDesc:'Permohonan cuti bulan ini.',
     noLeaveHistory:'Tiada permohonan cuti lagi.',
-    // Tax
     taxTitle:'Pembayaran Cukai',
     taxDesc:'Muat naik bukti bayar cukai terus ke Discord.',
     uploadTaxTitle:'Muat Naik Bukti Cukai',
@@ -1948,19 +1951,16 @@ const T = {
     taxHint:'Maks 5MB setiap foto. Format JPG, PNG, atau WEBP.',
     taxHistoryTitle:'Sejarah Cukai', taxHistoryDesc:'Cukai bulan ini.',
     noTaxHistory:'Tiada bayaran cukai lagi.',
-    // Rank
     rankTitle:'Kedudukan Pekerja',
     rankDesc:'Disusun ikut jumlah jam kerja bulan ini.',
-    rankListTitle:'Pekerja Terbaik bulan Ini',
+    rankListTitle:'Pekerja Terbaik Bulan Ini',
     rankListDesc:'Kedudukan 1-3 dapat bonus dari boss.',
-    // Stats
     statsTitle:'Statistik', statsDesc:'Visualisasi jam kerja dan prestasi pasukan.',
     statsTotal:'Jumlah Jam', statsAvg:'Purata / Pekerja',
     statsMax:'Jam Tertinggi', statsShifts:'Jumlah Syif',
     chartTitle:'Visualisasi Jam Kerja', chartDesc:'Pilih paparan carta.',
     chartBar:'Bar', chartDoughnut:'Donut', chartRadar:'Radar',
     detailsTitle:'Butiran Setiap Pekerja', detailsDesc:'Jumlah jam kerja bulan ini.',
-    // Errors
     errSelect:'Pilih pekerja dulu.',
     errDate:'Pilih tarikh dulu.',
     errPhoto:'Muat naik foto bukti dulu.',
@@ -1972,7 +1972,6 @@ const T = {
     errLeaveReason:'Pilih sebab cuti.',
     errLeaveDates:'Isi tarikh mula dan tarikh tamat.',
     errLeaveRange:'Tarikh tamat mesti selepas tarikh mula.',
-    // Messages
     loadingData:'Memuatkan data…',
     msgClockIn:'Clock in direkod. Selamat bekerja!',
     msgClockOut:'Clock out direkod. Syif tamat.',
@@ -2138,8 +2137,8 @@ function renderDashboard() {
   $('stat-employees').textContent = totalCount;
   $('stat-on-duty').textContent = onCount;
   $('stat-off-duty').textContent = Math.max(0, totalCount - onCount);
-  $('stat-hours').textContent = fmtHours(d.monthlyMinutes ?? 0);
-  if (d.monthLabel) $('month-label').textContent = d.monthLabel;
+  $('stat-hours').textContent = fmtHours(d.weeklyMinutes ?? 0);
+  if (d.weekLabel) $('week-label').textContent = d.weekLabel;
 
   $('live-attendance-body').innerHTML = active.length
     ? active.map(a => `
@@ -2167,19 +2166,28 @@ function renderDashboard() {
     `).join('')
     : `<div class="empty-state">${t('loading')}</div>`;
 
-  renderWeeklyChart(d.daily || []);
+  renderMonthlyChart(d.daily || []);
 }
 
-function renderWeeklyChart(daily) {
+// ============================================================
+// RENDER: MONTHLY CHART (X-axis = tanggal 1..31)
+// ============================================================
+function renderMonthlyChart(daily) {
   if (!window.Chart) return;
-  const labels = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
-  const values = labels.map((_, i) => {
-    const found = daily.find(x => Number(x.dayIndex) === i);
-    return found ? Math.round(found.minutes / 60 * 10) / 10 : 0;
-  });
+
+  let labels, values;
+  if (daily && daily.length) {
+    labels = daily.map(d => d.label || (d.dayIndex + 1));
+    values = daily.map(d => Math.round((d.minutes || 0) / 60 * 10) / 10);
+  } else {
+    labels = Array.from({length: 31}, (_, i) => i + 1);
+    values = new Array(31).fill(0);
+  }
+
   if (state.chart) state.chart.destroy();
-  const canvas = $('monthly-chart');
+  const canvas = $('weekly-chart');
   if (!canvas) return;
+
   state.chart = new Chart(canvas, {
     type: 'bar',
     data: {
@@ -2193,8 +2201,8 @@ function renderWeeklyChart(daily) {
           g.addColorStop(1, 'rgba(128, 0, 32, 0.5)');
           return g;
         },
-        borderRadius: 6,
-        maxBarThickness: 32,
+        borderRadius: 4,
+        maxBarThickness: 14,
       }],
     },
     options: {
@@ -2210,13 +2218,25 @@ function renderWeeklyChart(daily) {
           borderWidth: 1,
           padding: 10,
           cornerRadius: 8,
-          callbacks: { label: c => `${c.raw} jam` },
+          callbacks: {
+            title: (items) => 'Tanggal ' + items[0].label,
+            label: c => `${c.raw} jam`,
+          },
         },
       },
       scales: {
         x: {
           grid: { display: false },
-          ticks: { color: '#A88F94', font: { size: 11, weight: '600' } },
+          ticks: {
+            color: '#A88F94',
+            font: { size: 9, weight: '600' },
+            autoSkip: false,
+            maxRotation: 0,
+            callback: function(val, idx) {
+              const d = Number(this.getLabelForValue(val));
+              return [1, 5, 10, 15, 20, 25, 30].includes(d) ? d : '';
+            },
+          },
           border: { display: false },
         },
         y: {
@@ -2764,7 +2784,7 @@ function tickClock() {
   const now = new Date();
   const date = $('current-date');
   const time = $('current-time');
-  if (date) date.textContent = now.toLocaleDateString('id-ID', { monthday:'short', day:'2-digit', month:'short', year:'numeric' });
+  if (date) date.textContent = now.toLocaleDateString('id-ID', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
   if (time) time.textContent = now.toLocaleTimeString('id-ID', { hour12: false });
 }
 
